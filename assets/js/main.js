@@ -41,12 +41,13 @@
     const edgePad = isNarrow ? 96 : Math.max(46, W * 0.07);
     const driftX = isNarrow ? 1.2 : 3;
     const driftY = isNarrow ? 2.2 : 4;
-    const baseY = isNarrow ? H * 0.15 : H * 0.5;
+    const baseY = isNarrow ? H * 0.22 : H * 0.5;
     const safeTopY = isNarrow ? 58 : 0;
+    const safeBottomY = isNarrow ? H - 58 : H;
     const hubY = baseY + Math.cos(t * 0.42) * driftY;
     return {
       x: W - edgePad + Math.sin(t * 0.5) * driftX,
-      y: Math.max(safeTopY, hubY)
+      y: Math.min(safeBottomY, Math.max(safeTopY, hubY))
     };
   }
 
@@ -55,7 +56,7 @@
     const centerX = isNarrow ? W * 0.46 : W * 0.61;
     const driftX = isNarrow ? 2.2 : 5;
     const driftY = isNarrow ? 2.4 : 4;
-    const centerY = isNarrow ? H * 0.19 : H * 0.5;
+    const centerY = isNarrow ? H * 0.26 : H * 0.5;
     return {
       x: centerX + Math.sin(t * 0.25) * driftX,
       y: centerY + Math.cos(t * 0.21) * driftY
@@ -72,7 +73,7 @@
     nodes = [];
     const center = networkCenter();
     const isNarrow = W <= 700;
-    const maxRadius = Math.min(W, H) * (isNarrow ? 0.165 : 0.23);
+    const maxRadius = Math.min(W, H) * (isNarrow ? 0.15 : 0.23);
     const nodePad = isNarrow ? 20 : 12;
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -216,7 +217,7 @@
     if(pulses.length < (isLiteDevice ? 14 : 26) && Math.random() < (isLiteDevice ? 0.1 : 0.18)) spawnHubPulse();
 
     // Hub geometry
-    const hubScale = W <= 700 ? 0.78 : 1;
+    const hubScale = W <= 700 ? 0.72 : 1;
     const hubOuter = (14 + Math.sin(t * 3.2) * 2.4) * hubScale;
     const hubCore = (5.3 + Math.sin(t * 4.3) * 1.1) * hubScale;
     const halo = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8));
