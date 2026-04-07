@@ -140,7 +140,7 @@
       const palette = layerPalette(l);
       const jitterX = isPhone ? 0.28 : isTablet ? 0.32 : isSmallLaptop ? 0.42 : 0.5;
       const jitterY = isPhone ? 0.74 : isTablet ? 0.86 : isSmallLaptop ? 0.98 : 1.1;
-      const layerSpreadScale = l === 0 ? (isPhone ? 0.24 : isTablet ? 0.28 : isSmallLaptop ? 0.3 : 0.32) : (l === LAYERS.length - 1 ? (isPhone ? 0.16 : isTablet ? 0.19 : isSmallLaptop ? 0.21 : 0.22) : (isPhone ? 0.62 : isTablet ? 0.66 : isSmallLaptop ? 0.69 : 0.72));
+      const layerSpreadScale = l === 0 ? (isPhone ? 0.42 : isTablet ? 0.28 : isSmallLaptop ? 0.3 : 0.32) : (l === LAYERS.length - 1 ? (isPhone ? 0.28 : isTablet ? 0.19 : isSmallLaptop ? 0.21 : 0.22) : (isPhone ? 0.88 : isTablet ? 0.66 : isSmallLaptop ? 0.69 : 0.72));
       const spread = count > 1 ? usableHeight * layerSpreadScale * sizeY : 0;
       const top = H * 0.5 - spread * 0.5;
       for(let n=0;n<count;n++){
