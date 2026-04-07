@@ -69,15 +69,21 @@
 
   function buildNodes(){
     nodes = [];
-    const isNarrow = W <= 700;
-    const layerPositions = isNarrow
-      ? [0.34, 0.48, 0.62, 0.76, 0.9]
-      : [0.44, 0.57, 0.7, 0.83, 0.96];
-    const sizeX = isNarrow ? 0.66 : 0.68;
-    const sizeY = isNarrow ? 0.46 : 0.52;
+    const isPhone = W <= 700;
+    const isTablet = W > 700 && W <= 1024;
+    const isSmallLaptop = W > 1024 && W <= 1200;
+    const layerPositions = isPhone
+      ? [0.30, 0.44, 0.58, 0.72, 0.86]
+      : isTablet
+        ? [0.34, 0.48, 0.62, 0.76, 0.9]
+        : isSmallLaptop
+          ? [0.38, 0.52, 0.66, 0.8, 0.93]
+          : [0.44, 0.57, 0.7, 0.83, 0.96];
+    const sizeX = isPhone ? 0.62 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
+    const sizeY = isPhone ? 0.42 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
     const leftAnchor = W * layerPositions[0];
-    const topPad = isNarrow ? H * 0.08 : H * 0.08;
-    const bottomPad = isNarrow ? H * 0.08 : H * 0.08;
+    const topPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const bottomPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -85,9 +91,9 @@
       const originalX = W * layerPositions[l];
       const x = leftAnchor + (originalX - leftAnchor) * sizeX;
       const palette = layerPalette(l);
-      const jitterX = isNarrow ? 0.35 : 0.5;
-      const jitterY = isNarrow ? 0.9 : 1.1;
-      const layerSpreadScale = l === 0 ? 0.32 : (l === LAYERS.length - 1 ? 0.22 : 0.72);
+      const jitterX = isPhone ? 0.28 : isTablet ? 0.32 : isSmallLaptop ? 0.42 : 0.5;
+      const jitterY = isPhone ? 0.74 : isTablet ? 0.86 : isSmallLaptop ? 0.98 : 1.1;
+      const layerSpreadScale = l === 0 ? (isPhone ? 0.24 : isTablet ? 0.28 : isSmallLaptop ? 0.3 : 0.32) : (l === LAYERS.length - 1 ? (isPhone ? 0.16 : isTablet ? 0.19 : isSmallLaptop ? 0.21 : 0.22) : (isPhone ? 0.62 : isTablet ? 0.66 : isSmallLaptop ? 0.69 : 0.72));
       const spread = count > 1 ? usableHeight * layerSpreadScale * sizeY : 0;
       const top = H * 0.5 - spread * 0.5;
       for(let n=0;n<count;n++){
@@ -112,7 +118,7 @@
     }
 
     orbitParticles = [];
-    const particleCount = isLiteDevice ? 8 : 14;
+    const particleCount = isPhone ? 8 : isTablet ? 10 : isSmallLaptop ? 12 : 14;
     for(let i=0;i<particleCount;i++){
       orbitParticles.push({
         angleSeed:(i/particleCount)*Math.PI*2,

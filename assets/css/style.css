@@ -465,6 +465,36 @@ footer{
   .nav-links a{font-size:0.68rem;letter-spacing:0.08em}
 }
 
+@media(max-width:1200px){
+  nav{padding:0 2.5rem}
+  .hero{padding:0 2.5rem}
+  section{padding:6rem 2.5rem}
+  hr.rule{margin:0 2.5rem}
+  footer{padding:2rem 2.5rem}
+}
+
+@media(max-width:1024px){
+  .hero{padding:0 2rem}
+  .hero-content{max-width:540px}
+  h1{font-size:clamp(2.8rem,5.5vw,5rem)}
+  .hero-role{font-size:0.68rem;letter-spacing:0.16em}
+  .hero-bio{max-width:420px}
+}
+
+@media(max-width:1024px) and (orientation: landscape){
+  .hero{padding:0 2rem}
+  .hero-content{max-width:520px}
+  #nn-canvas{filter:saturate(1.24) contrast(1.1) brightness(0.98)}
+}
+
+@media(max-width:1024px) and (orientation: portrait){
+  .hero{padding:6.6rem 1.5rem 5rem}
+  .hero-content{max-width:100%}
+  h1{font-size:clamp(2.45rem,7vw,4rem)}
+  .hero-bio{max-width:100%}
+  #nn-canvas{filter:saturate(1.22) contrast(1.08) brightness(0.99)}
+}
+
 @media(max-width:920px){
   nav{height:60px}
   .logo{font-size:0.68rem;letter-spacing:0.14em}
@@ -526,12 +556,12 @@ footer{
 @media(max-width:700px){
   .hero{
     min-height:auto;
-    padding:5.6rem 1.5rem 3.1rem;
+    padding:5.4rem 1.25rem 3rem;
   }
   .hero-content{margin-top:0}
   .hero-content h1{margin-top:0}
   .hero-btns{flex-wrap:wrap}
-  h1{font-size:clamp(2.25rem,11.4vw,3.2rem);line-height:1.05;margin-bottom:1.2rem}
+  h1{font-size:clamp(2.15rem,10.8vw,3.1rem);line-height:1.05;margin-bottom:1rem}
   .hero-content{max-width:100%}
   .hero-role{font-size:0.66rem;letter-spacing:0.14em}
   .hero-bio{font-size:0.94rem;line-height:1.72}
@@ -560,6 +590,21 @@ footer{
   .f-soc{gap:1rem;flex-wrap:wrap}
 }
 
+@media(max-width:700px) and (orientation:landscape){
+  .hero{padding:4.8rem 1.25rem 2.6rem}
+  .hero-content{max-width:58%}
+  .hero-btns{gap:0.75rem}
+  .btn-fill,.btn-stroke{width:auto;min-width:132px}
+}
+
+@media(max-width:480px) and (orientation:portrait){
+  .hero{padding:4.6rem 1rem 2rem}
+  .hero-content{max-width:100%}
+  h1{font-size:clamp(2.05rem,12vw,3rem)}
+  .hero-bio{font-size:0.92rem;line-height:1.68}
+  #nn-canvas{filter:saturate(1.18) contrast(1.06) brightness(1)}
+}
+
 @media(max-width:560px){
   .proj-stack,.proj-nums{gap:0.55rem}
   .hero-role,.proj-desc,.meta-val,.exp-pts li,.edu-deg,.contact-intro{overflow-wrap:anywhere}
@@ -574,7 +619,7 @@ footer{
 @media(max-width:480px){
   html{font-size:15px}
   nav{padding:0 1rem}
-  .hero{min-height:auto;padding:5.1rem 1rem 2.3rem}
+  .hero{min-height:auto;padding:4.9rem 1rem 2.2rem}
   .hero-content{margin-top:0}
   .hero-content h1{margin-top:0}
   section{padding:4rem 1rem}
