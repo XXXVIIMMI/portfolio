@@ -117,7 +117,7 @@
     const isTablet = W > 700 && W <= 1024;
     const isSmallLaptop = W > 1024 && W <= 1200;
     const layerPositions = isPhone
-      ? [-0.05, 0.08, 0.22, 0.36, 0.50]
+      ? [0.15, 0.29, 0.43, 0.57, 0.71]
       : isTablet
         ? [0.34, 0.48, 0.62, 0.76, 0.9]
         : isSmallLaptop
@@ -250,7 +250,7 @@
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
       ctx.scale(1.03, 1.03);
-      ctx.translate(-W * 0.5 - 90, -H * 0.5);
+      ctx.translate(-W * 0.5 - 25, -H * 0.5);
     }
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
@@ -353,7 +353,7 @@
     }
 
     // Right-side atom-style hub
-    const hubX = W * (isLiteDevice ? 0.65 : 0.94);
+    const hubX = W * (isLiteDevice ? 0.78 : 0.94);
     const hubY = H * 0.5 + Math.sin(t * 1.35) * 1.8;
     const beat = Math.max(0, Math.sin(t * 5.2));
     const hubPulse = Math.pow(beat, 3);
