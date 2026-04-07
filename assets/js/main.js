@@ -201,6 +201,13 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     const showGlow = !isLiteDevice;
+    const isSmartphone = W <= 480;
+    if(isSmartphone){
+      ctx.save();
+      ctx.translate(W * 0.5, H * 0.5);
+      ctx.scale(1.15, 1.15);
+      ctx.translate(-W * 0.5, -H * 0.5);
+    }
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
       bgGlow.addColorStop(0, 'rgba(123,198,255,0.2)');
@@ -474,6 +481,10 @@
       ctx.arc(px, py, 1.4, 0, Math.PI * 2);
       ctx.fillStyle = rgba({r:255,g:255,b:255}, Math.min(0.84, headAlpha + 0.28));
       ctx.fill();
+    }
+
+    if(isSmartphone){
+      ctx.restore();
     }
 
     animId = requestAnimationFrame(draw);
