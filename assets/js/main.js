@@ -41,7 +41,7 @@
     const edgePad = isNarrow ? 96 : Math.max(46, W * 0.07);
     const driftX = isNarrow ? 1.2 : 3;
     const driftY = isNarrow ? 2.2 : 4;
-    const baseY = isNarrow ? H * 0.23 : H * 0.5;
+    const baseY = isNarrow ? H * 0.17 : H * 0.5;
     return {
       x: W - edgePad + Math.sin(t * 0.5) * driftX,
       y: baseY + Math.cos(t * 0.42) * driftY
@@ -53,7 +53,7 @@
     const centerX = isNarrow ? W * 0.46 : W * 0.61;
     const driftX = isNarrow ? 2.2 : 5;
     const driftY = isNarrow ? 2.4 : 4;
-    const centerY = isNarrow ? H * 0.28 : H * 0.5;
+    const centerY = isNarrow ? H * 0.2 : H * 0.5;
     return {
       x: centerX + Math.sin(t * 0.25) * driftX,
       y: centerY + Math.cos(t * 0.21) * driftY
