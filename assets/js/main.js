@@ -121,6 +121,8 @@
   function draw(){
     ctx.clearRect(0,0,W,H);
     t += 0.007;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
 
     // Animate activations
     for(let l=0;l<LAYERS.length;l++)
@@ -138,10 +140,11 @@
           const mid = lerpColor(n1.col, n2.col, 0.5);
           const grad = ctx.createLinearGradient(n1.x,n1.y,n2.x,n2.y);
           grad.addColorStop(0, rgba(n1.col, alpha));
-          grad.addColorStop(0.5, rgba(mid, alpha*1.5));
+          grad.addColorStop(0.45, rgba(mid, alpha*1.7));
+          grad.addColorStop(0.55, 'rgba(217,174,120,0.08)');
           grad.addColorStop(1, rgba(n2.col, alpha));
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 0.6; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 0.72; ctx.stroke();
         }
       }
     }
@@ -160,7 +163,7 @@
         ctx.moveTo(n1.x, n1.y);
         ctx.lineTo(n2.x, n2.y);
         ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.7;
+        ctx.lineWidth = 0.82;
         ctx.stroke();
       }
     }
@@ -178,7 +181,7 @@
         ctx.moveTo(nd.x, nd.y);
         ctx.lineTo(hub.x, hub.y);
         ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.45;
+        ctx.lineWidth = 0.52;
         ctx.stroke();
       }
     }
@@ -237,7 +240,8 @@
 
     const hubCoreGrad = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubCore * 2.8);
     hubCoreGrad.addColorStop(0, 'rgba(255,255,255,1)');
-    hubCoreGrad.addColorStop(0.45, 'rgba(196,150,90,0.98)');
+    hubCoreGrad.addColorStop(0.3, 'rgba(217,174,120,0.98)');
+    hubCoreGrad.addColorStop(0.56, 'rgba(196,150,90,0.92)');
     hubCoreGrad.addColorStop(1, 'rgba(196,150,90,0.06)');
     ctx.beginPath();
     ctx.arc(hub.x,hub.y,hubCore * 2.8,0,Math.PI*2);
@@ -255,15 +259,15 @@
     ctx.beginPath();
     ctx.ellipse(0, 0, orbitRx, orbitRy, orbitSpin, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(196,150,90,0.68)';
-    ctx.lineWidth = 1.1;
+    ctx.lineWidth = 1.2;
     ctx.stroke();
 
     ctx.beginPath();
     ctx.ellipse(0, 0, orbitRx, orbitRy, orbitSpin + Math.PI / 2.2, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(217,174,120,0.66)';
-    ctx.lineWidth = 1.05;
+    ctx.lineWidth = 1.1;
     ctx.stroke();
-    ctx.lineWidth = 0.85;
+    ctx.lineWidth = 0.9;
     ctx.stroke();
 
     ctx.restore();
@@ -282,20 +286,21 @@
         const sy = nd.y + Math.cos(t*0.58+nd.phase*1.2)*2.2 + neighborInfluence*1.5;
         const r = 2 + act*2.4;
         const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*4);
-        glow.addColorStop(0, rgba(nd.col, 0.2*act));
+        glow.addColorStop(0, rgba(nd.col, 0.26*act));
+        glow.addColorStop(0.5, 'rgba(255,255,255,0.06)');
         glow.addColorStop(1, rgba(nd.col, 0));
         ctx.beginPath(); ctx.arc(sx,sy,r*4,0,Math.PI*2);
         ctx.fillStyle=glow; ctx.fill();
 
         ctx.beginPath();
         ctx.arc(sx,sy,r+1.2,0,Math.PI*2);
-        ctx.strokeStyle = rgba(nd.col, 0.72);
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = rgba(nd.col, 0.8);
+        ctx.lineWidth = 1.1;
         ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(sx,sy,r*0.72,0,Math.PI*2);
-        ctx.fillStyle = rgba({r:255,g:255,b:255}, 0.82*act);
+        ctx.fillStyle = rgba({r:255,g:255,b:255}, 0.9*act);
         ctx.fill();
       }
     }
