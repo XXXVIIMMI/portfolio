@@ -104,32 +104,26 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 
 /* ── HERO ── */
 .hero{
-  min-height:100vh;display:flex;align-items:center;
-  position:relative;overflow:hidden;padding:0 4rem;
+  min-height:100svh;display:flex;align-items:center;
+  position:relative;overflow:hidden;padding:0;
   background:var(--ink);
-}
-.hero::after{
-  content:'';position:absolute;left:0;right:0;bottom:0;height:180px;pointer-events:none;
-  background:linear-gradient(to bottom,rgba(9,9,11,0) 0%,rgba(9,9,11,0.45) 52%,rgba(9,9,11,1) 100%);
-  z-index:1;
 }
 
 .hero-content{
   position:relative;z-index:2;width:100%;max-width:none;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:0 4rem;
 }
 
 .hero-inner{
-  position:relative;z-index:2;max-width:600px;
+  position:relative;z-index:2;max-width:620px;width:100%;
   transform-style:preserve-3d;will-change:transform;
-  transform: rotateX(var(--hero-rx,0deg)) rotateY(var(--hero-ry,0deg));
-  transition:transform 0.2s cubic-bezier(0.22,1,0.36,1);
+  transform:rotateX(var(--hero-rx,0deg)) rotateY(var(--hero-ry,0deg));
+  transition:transform 0.22s cubic-bezier(0.22,1,0.36,1);
 }
-
-.hero-inner .h-label{animation:heroTextDriftA 6.2s ease-in-out infinite;}
-.hero-inner h1{animation:heroTextDriftB 6.8s ease-in-out infinite;}
-.hero-inner .hero-role{animation:heroTextDriftA 6.4s ease-in-out infinite;}
-.hero-inner .hero-bio{animation:heroTextDriftC 7.1s ease-in-out infinite;}
-.hero-inner .hero-btns{animation:heroTextDriftC 7.4s ease-in-out infinite;}
 
 .hero-visual{
   position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -139,9 +133,7 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
-  background:
-    radial-gradient(circle at 24% 40%,rgba(196,150,90,0.06) 0%,rgba(196,150,90,0) 42%),
-    linear-gradient(135deg,rgba(9,9,11,0.68) 0%,rgba(9,9,11,0.58) 55%,rgba(9,9,11,0.5) 100%);
+  background:linear-gradient(180deg,rgba(9,9,11,0.56) 0%,rgba(9,9,11,0.46) 50%,rgba(9,9,11,0.58) 100%);
 }
 
 .h-label{
@@ -153,7 +145,7 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 h1{
   font-family:'Playfair Display',serif;
   font-size:clamp(3.2rem,5.8vw,5.8rem);font-weight:400;
-  line-height:1.02;letter-spacing:-0.02em;margin:0 0 0.8rem -0.04em;
+  line-height:1.02;letter-spacing:-0.02em;margin:0 0 0.8rem 0;
   text-align:left;
 }
 h1 i{font-style:italic;color:var(--gold)}
@@ -495,14 +487,14 @@ footer{
 
 @media(max-width:1200px){
   nav{padding:0 2.5rem}
-  .hero{padding:0 2.5rem}
+  .hero-content{padding:0 2.5rem}
   section{padding:6rem 2.5rem}
   hr.rule{margin:0 2.5rem}
   footer{padding:2rem 2.5rem}
 }
 
 @media(max-width:1024px){
-  .hero{padding:0 2rem}
+  .hero-content{padding:0 2rem}
   .hero-inner{max-width:540px}
   h1{font-size:clamp(2.8rem,5.5vw,5rem)}
   .hero-role{font-size:0.68rem;letter-spacing:0.16em}
@@ -510,13 +502,13 @@ footer{
 }
 
 @media(max-width:1024px) and (orientation: landscape){
-  .hero{padding:0 2rem}
+  .hero-content{padding:0 2rem}
   .hero-inner{max-width:520px}
   #nn-canvas{filter:saturate(1.24) contrast(1.1) brightness(0.98)}
 }
 
 @media(max-width:1024px) and (orientation: portrait){
-  .hero{padding:6.6rem 1.5rem 5rem}
+  .hero-content{padding:6.6rem 1.5rem 5rem}
   .hero-inner{max-width:100%}
   h1{font-size:clamp(2.45rem,7vw,4rem)}
   .hero-bio{max-width:100%}
@@ -567,7 +559,7 @@ footer{
 
 @media(max-width:880px){
   nav{padding:0 1.5rem}
-  .hero{padding:7rem 1.5rem 8rem;}
+  .hero-content{padding:7rem 1.5rem 8rem;}
   section{padding:5rem 1.5rem}
   hr.rule{margin:0 1.5rem}
   .about-cols{grid-template-columns:1fr;gap:3rem}

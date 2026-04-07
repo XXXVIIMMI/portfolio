@@ -1,18 +1,21 @@
 // ── SHAKIL AHMED PORTFOLIO — MAIN JAVASCRIPT ──
 
-// ── HERO 3D EFFECT ─────────────────────────────────────────────
+// ── HERO TEXT TILT ────────────────────────────────────────────
 (function(){
   const hero = document.querySelector('.hero');
   if(!hero) return;
   const content = hero.querySelector('.hero-inner');
+  if(!content) return;
   const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(isReduced) return;
+
   const tilt = {x:0, y:0, tx:0, ty:0, raf:0};
 
   function renderTilt(){
-    tilt.x += (tilt.tx - tilt.x) * 0.18;
-    tilt.y += (tilt.ty - tilt.y) * 0.18;
-    content.style.setProperty('--hero-ry', `${tilt.x * 10}deg`);
-    content.style.setProperty('--hero-rx', `${tilt.y * -10}deg`);
+    tilt.x += (tilt.tx - tilt.x) * 0.16;
+    tilt.y += (tilt.ty - tilt.y) * 0.16;
+    content.style.setProperty('--hero-ry', `${tilt.x * 8}deg`);
+    content.style.setProperty('--hero-rx', `${tilt.y * -8}deg`);
 
     if(Math.abs(tilt.tx - tilt.x) > 0.001 || Math.abs(tilt.ty - tilt.y) > 0.001){
       tilt.raf = requestAnimationFrame(renderTilt);
@@ -25,23 +28,20 @@
     if(!tilt.raf) tilt.raf = requestAnimationFrame(renderTilt);
   }
 
-  if(!isReduced){
-    hero.addEventListener('mousemove', e => {
-      const {clientX:x, clientY:y} = e;
-      const {width:w, height:h} = hero.getBoundingClientRect();
-      const halfW = w / 2;
-      const halfH = h / 2;
-      tilt.tx = (x - halfW) / halfW;
-      tilt.ty = (y - halfH) / halfH;
-      queueTilt();
-    });
+  hero.addEventListener('mousemove', e => {
+    const rect = hero.getBoundingClientRect();
+    const halfW = rect.width / 2;
+    const halfH = rect.height / 2;
+    tilt.tx = (e.clientX - rect.left - halfW) / halfW;
+    tilt.ty = (e.clientY - rect.top - halfH) / halfH;
+    queueTilt();
+  });
 
-    hero.addEventListener('mouseleave', () => {
-      tilt.tx = 0;
-      tilt.ty = 0;
-      queueTilt();
-    });
-  }
+  hero.addEventListener('mouseleave', () => {
+    tilt.tx = 0;
+    tilt.ty = 0;
+    queueTilt();
+  });
 })();
 
 // ── NEURAL NETWORK LIVE WALLPAPER ──────────────────────────────
@@ -123,11 +123,11 @@
         : isSmallLaptop
           ? [0.38, 0.52, 0.66, 0.8, 0.93]
           : [0.44, 0.57, 0.7, 0.83, 0.96];
-    const sizeX = isPhone ? 0.62 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
-    const sizeY = isPhone ? 0.54 : isTablet ? 0.58 : isSmallLaptop ? 0.61 : 0.64;
+    const sizeX = isPhone ? 0.44 : isTablet ? 0.47 : isSmallLaptop ? 0.49 : 0.52;
+    const sizeY = isPhone ? 0.37 : isTablet ? 0.4 : isSmallLaptop ? 0.43 : 0.46;
     const leftAnchor = W * layerPositions[0];
-    const topPad = isPhone ? H * 0.045 : isTablet ? H * 0.05 : isSmallLaptop ? H * 0.055 : H * 0.05;
-    const bottomPad = isPhone ? H * 0.045 : isTablet ? H * 0.05 : isSmallLaptop ? H * 0.055 : H * 0.05;
+    const topPad = isPhone ? H * 0.1 : isTablet ? H * 0.11 : isSmallLaptop ? H * 0.12 : H * 0.11;
+    const bottomPad = isPhone ? H * 0.1 : isTablet ? H * 0.11 : isSmallLaptop ? H * 0.12 : H * 0.11;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -249,7 +249,7 @@
     if(isSmartphone){
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
-      ctx.scale(1.15, 1.15);
+      ctx.scale(1.03, 1.03);
       ctx.translate(-W * 0.5, -H * 0.5);
     }
 
