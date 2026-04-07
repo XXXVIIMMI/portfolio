@@ -73,7 +73,7 @@
     const isTablet = W > 700 && W <= 1024;
     const isSmallLaptop = W > 1024 && W <= 1200;
     const layerPositions = isPhone
-      ? [0.38, 0.50, 0.62, 0.74, 0.86]
+      ? [0.32, 0.46, 0.60, 0.74, 0.88]
       : isTablet
         ? [0.34, 0.48, 0.62, 0.76, 0.9]
         : isSmallLaptop
@@ -201,13 +201,13 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     const showGlow = !isLiteDevice;
-    const isSmartphone = W <= 480;
-    if(isSmartphone){
+    const isMobile = isPhone;
+    if(isMobile){
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
       ctx.scale(1.5, 1.5);
       ctx.translate(-W * 0.5, -H * 0.5);
-      ctx.translate(-W * 0.31, 0); // Aggregate shift left for full hub visibility
+      ctx.translate(-W * 0.20, 0); // Balanced shift to prevent left-side cutoff
     }
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
@@ -310,7 +310,7 @@
     }
 
     // Right-side atom-style hub
-    const hubX = W * (isSmartphone ? 0.94 : (isLiteDevice ? 0.905 : 0.94));
+    const hubX = W * (isMobile ? 0.92 : (isLiteDevice ? 0.905 : 0.94));
     const hubY = H * 0.5 + Math.sin(t * 1.35) * 1.8;
     const beat = Math.max(0, Math.sin(t * 5.2));
     const hubPulse = Math.pow(beat, 3);
