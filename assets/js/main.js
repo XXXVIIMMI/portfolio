@@ -1,5 +1,49 @@
 // ── SHAKIL AHMED PORTFOLIO — MAIN JAVASCRIPT ──
 
+// ── HERO 3D EFFECT ─────────────────────────────────────────────
+(function(){
+  const hero = document.querySelector('.hero');
+  if(!hero) return;
+  const content = hero.querySelector('.hero-inner');
+  const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tilt = {x:0, y:0, tx:0, ty:0, raf:0};
+
+  function renderTilt(){
+    tilt.x += (tilt.tx - tilt.x) * 0.18;
+    tilt.y += (tilt.ty - tilt.y) * 0.18;
+    content.style.setProperty('--hero-ry', `${tilt.x * 10}deg`);
+    content.style.setProperty('--hero-rx', `${tilt.y * -10}deg`);
+
+    if(Math.abs(tilt.tx - tilt.x) > 0.001 || Math.abs(tilt.ty - tilt.y) > 0.001){
+      tilt.raf = requestAnimationFrame(renderTilt);
+      return;
+    }
+    tilt.raf = 0;
+  }
+
+  function queueTilt(){
+    if(!tilt.raf) tilt.raf = requestAnimationFrame(renderTilt);
+  }
+
+  if(!isReduced){
+    hero.addEventListener('mousemove', e => {
+      const {clientX:x, clientY:y} = e;
+      const {width:w, height:h} = hero.getBoundingClientRect();
+      const halfW = w / 2;
+      const halfH = h / 2;
+      tilt.tx = (x - halfW) / halfW;
+      tilt.ty = (y - halfH) / halfH;
+      queueTilt();
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      tilt.tx = 0;
+      tilt.ty = 0;
+      queueTilt();
+    });
+  }
+})();
+
 // ── NEURAL NETWORK LIVE WALLPAPER ──────────────────────────────
 (function(){
   const canvas = document.getElementById('nn-canvas');
@@ -80,10 +124,10 @@
           ? [0.38, 0.52, 0.66, 0.8, 0.93]
           : [0.44, 0.57, 0.7, 0.83, 0.96];
     const sizeX = isPhone ? 0.62 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
-    const sizeY = isPhone ? 0.42 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
+    const sizeY = isPhone ? 0.54 : isTablet ? 0.58 : isSmallLaptop ? 0.61 : 0.64;
     const leftAnchor = W * layerPositions[0];
-    const topPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
-    const bottomPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const topPad = isPhone ? H * 0.045 : isTablet ? H * 0.05 : isSmallLaptop ? H * 0.055 : H * 0.05;
+    const bottomPad = isPhone ? H * 0.045 : isTablet ? H * 0.05 : isSmallLaptop ? H * 0.055 : H * 0.05;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -555,17 +599,6 @@ window.addEventListener('scroll',()=>{
     navToggle?.setAttribute('aria-expanded', 'false');
   }
 },{ passive:true });
-
-// ── HERO PARALLAX ON MOUSE ──
-const hero=document.querySelector('.hero-content');
-if(hero){
-  document.addEventListener('mousemove',e=>{
-    const mx=e.clientX/window.innerWidth-0.5;
-    const my=e.clientY/window.innerHeight-0.5;
-    hero.style.setProperty('--mx', mx);
-    hero.style.setProperty('--my', my);
-  },{ passive:true });
-}
 
 // ── CINEMATIC HERO CAMERA ROLL ──
 const heroSection = document.querySelector('.hero');
