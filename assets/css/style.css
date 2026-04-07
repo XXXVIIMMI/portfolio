@@ -525,7 +525,7 @@ footer{
     padding:5.6rem 1.5rem 3.1rem;
   }
   .hero-content{margin-top:4.6rem}
-  .hero-content h1{margin-top:2.3rem}
+  .hero-content h1{margin-top:3.1rem}
   .hero-btns{flex-wrap:wrap}
   h1{font-size:clamp(2.25rem,11.4vw,3.2rem);line-height:1.05;margin-bottom:1.2rem}
   .hero-content{max-width:100%}
@@ -572,7 +572,7 @@ footer{
   nav{padding:0 1rem}
   .hero{min-height:auto;padding:5.1rem 1rem 2.3rem}
   .hero-content{margin-top:5.8rem}
-  .hero-content h1{margin-top:3.2rem}
+  .hero-content h1{margin-top:4.2rem}
   section{padding:4rem 1rem}
   .about-section{padding-top:2.1rem}
   .about-section .sec-head{margin-bottom:2rem}
