@@ -31,8 +31,8 @@
     }
   }
 
-  // Network layers
-  const LAYERS = isLiteDevice ? [4, 5, 6, 5, 3] : [4, 6, 8, 6, 3];
+  // Network layers: input(4), three hidden(6 each), output(3)
+  const LAYERS = [4, 6, 6, 6, 3];
   let nodes = [];
   let pulses = [];
 
@@ -66,10 +66,10 @@
     nodes = [];
     const isNarrow = W <= 700;
     const layerPositions = isNarrow
-      ? [0.06, 0.27, 0.5, 0.73, 0.94]
-      : [0.08, 0.28, 0.5, 0.72, 0.92];
-    const sizeX = isNarrow ? 0.82 : 0.88;
-    const sizeY = isNarrow ? 0.74 : 0.82;
+      ? [0.34, 0.48, 0.62, 0.76, 0.9]
+      : [0.44, 0.57, 0.7, 0.83, 0.96];
+    const sizeX = isNarrow ? 0.66 : 0.68;
+    const sizeY = isNarrow ? 0.46 : 0.52;
     const leftAnchor = W * layerPositions[0];
     const topPad = isNarrow ? H * 0.08 : H * 0.08;
     const bottomPad = isNarrow ? H * 0.08 : H * 0.08;
@@ -82,7 +82,8 @@
       const palette = layerPalette(l);
       const jitterX = isNarrow ? 0.35 : 0.5;
       const jitterY = isNarrow ? 0.9 : 1.1;
-      const spread = count > 1 ? usableHeight * 0.86 * sizeY : 0;
+      const layerSpreadScale = l === 0 ? 0.32 : (l === LAYERS.length - 1 ? 0.22 : 0.72);
+      const spread = count > 1 ? usableHeight * layerSpreadScale * sizeY : 0;
       const top = H * 0.5 - spread * 0.5;
       for(let n=0;n<count;n++){
         const posT = count === 1 ? 0.5 : n / (count - 1);
@@ -208,6 +209,60 @@
         ctx.fill();
       }
     }
+
+    // Bright right-side hub connected to output layer
+    const hubX = W * (isLiteDevice ? 0.955 : 0.975);
+    const hubY = H * 0.5;
+    const beat = Math.max(0, Math.sin(t * 5.4));
+    const hubPulse = Math.pow(beat, 3);
+    const hubCore = { r: 255, g: 246, b: 170 };
+    const hubShell = { r: 255, g: 218, b: 110 };
+    const outLayer = nodes[LAYERS.length - 1];
+
+    for(let i=0;i<outLayer.length;i++){
+      const n = outLayer[i];
+      const grad = ctx.createLinearGradient(n.x, n.y, hubX, hubY);
+      grad.addColorStop(0, rgba(n.col, 0.16 + n.act * 0.12));
+      grad.addColorStop(1, rgba(hubShell, 0.4 + hubPulse * 0.44));
+      ctx.beginPath();
+      ctx.moveTo(n.x, n.y);
+      ctx.lineTo(hubX, hubY);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 0.9;
+      ctx.stroke();
+    }
+
+    const pointGlowRadius = (isLiteDevice ? 9 : 12) + hubPulse * 4;
+    const pointGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, pointGlowRadius);
+    pointGlow.addColorStop(0, rgba(hubCore, 0.84 + hubPulse * 0.16));
+    pointGlow.addColorStop(1, rgba(hubCore, 0));
+    ctx.beginPath();
+    ctx.arc(hubX, hubY, pointGlowRadius, 0, Math.PI * 2);
+    ctx.fillStyle = pointGlow;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(hubX, hubY, isLiteDevice ? 3.4 : 4.4, 0, Math.PI * 2);
+    ctx.fillStyle = rgba(hubCore, 1);
+    ctx.fill();
+
+    // Two rotating circles around the hub point
+    const ring1Radius = (isLiteDevice ? 7 : 9) + hubPulse * 2.6;
+    const ring2Radius = (isLiteDevice ? 10.6 : 13.4) + hubPulse * 3.4;
+    const spinA = t * 3.4;
+    const spinB = -t * 2.7;
+
+    ctx.beginPath();
+    ctx.arc(hubX, hubY, ring1Radius, spinA, spinA + Math.PI * 1.38);
+    ctx.strokeStyle = rgba(hubShell, 0.82 + hubPulse * 0.16);
+    ctx.lineWidth = 1.05 + hubPulse * 0.35;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(hubX, hubY, ring2Radius, spinB, spinB + Math.PI * 1.42);
+    ctx.strokeStyle = rgba(hubCore, 0.7 + hubPulse * 0.2);
+    ctx.lineWidth = 0.95 + hubPulse * 0.3;
+    ctx.stroke();
 
     // Floating data particles
     const particleCount = isLiteDevice ? 8 : 14;
