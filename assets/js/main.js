@@ -73,17 +73,17 @@
     const isTablet = W > 700 && W <= 1024;
     const isSmallLaptop = W > 1024 && W <= 1200;
     const layerPositions = isPhone
-      ? [0.16, 0.32, 0.48, 0.64, 0.80]
+      ? [0.30, 0.44, 0.58, 0.72, 0.86]
       : isTablet
         ? [0.34, 0.48, 0.62, 0.76, 0.9]
         : isSmallLaptop
           ? [0.38, 0.52, 0.66, 0.8, 0.93]
           : [0.44, 0.57, 0.7, 0.83, 0.96];
-    const sizeX = isPhone ? 0.75 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
-    const sizeY = isPhone ? 0.58 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
+    const sizeX = isPhone ? 0.62 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
+    const sizeY = isPhone ? 0.42 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
     const leftAnchor = W * layerPositions[0];
-    const topPad = isPhone ? H * 0.05 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
-    const bottomPad = isPhone ? H * 0.05 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const topPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const bottomPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -201,13 +201,12 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     const showGlow = !isLiteDevice;
-    const isMobile = W <= 700;
-    if(isMobile){
+    const isSmartphone = W <= 480;
+    if(isSmartphone){
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
-      ctx.scale(1.3, 1.3);
+      ctx.scale(1.15, 1.15);
       ctx.translate(-W * 0.5, -H * 0.5);
-      // Removed extra translation shift to maintain better control over margins
     }
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
@@ -310,7 +309,7 @@
     }
 
     // Right-side atom-style hub
-    const hubX = W * (isMobile ? 0.88 : (isLiteDevice ? 0.905 : 0.94));
+    const hubX = W * (isLiteDevice ? 0.905 : 0.94);
     const hubY = H * 0.5 + Math.sin(t * 1.35) * 1.8;
     const beat = Math.max(0, Math.sin(t * 5.2));
     const hubPulse = Math.pow(beat, 3);
