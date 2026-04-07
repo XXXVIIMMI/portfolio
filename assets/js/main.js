@@ -73,7 +73,7 @@
     const isTablet = W > 700 && W <= 1024;
     const isSmallLaptop = W > 1024 && W <= 1200;
     const layerPositions = isPhone
-      ? [0.30, 0.44, 0.58, 0.72, 0.86]
+      ? [0.26, 0.40, 0.54, 0.68, 0.82]
       : isTablet
         ? [0.34, 0.48, 0.62, 0.76, 0.9]
         : isSmallLaptop
@@ -309,7 +309,7 @@
     }
 
     // Right-side atom-style hub
-    const hubX = W * (isLiteDevice ? 0.905 : 0.94);
+    const hubX = W * (isSmartphone ? 0.80 : (isLiteDevice ? 0.905 : 0.94));
     const hubY = H * 0.5 + Math.sin(t * 1.35) * 1.8;
     const beat = Math.max(0, Math.sin(t * 5.2));
     const hubPulse = Math.pow(beat, 3);
