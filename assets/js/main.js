@@ -73,7 +73,7 @@
     nodes = [];
     const center = networkCenter();
     const isNarrow = W <= 700;
-    const maxRadius = Math.min(W, H) * (isNarrow ? 0.15 : 0.23);
+    const maxRadius = Math.min(W, H) * (isNarrow ? 0.165 : 0.23);
     const nodePad = isNarrow ? 20 : 12;
     const nodeTopPad = isNarrow ? 86 : nodePad;
     const nodeBottomPad = isNarrow ? Math.max(156, H * 0.4) : H - nodePad;
@@ -219,7 +219,7 @@
     if(pulses.length < (isLiteDevice ? 14 : 26) && Math.random() < (isLiteDevice ? 0.1 : 0.18)) spawnHubPulse();
 
     // Hub geometry
-    const hubScale = W <= 700 ? 0.72 : 1;
+    const hubScale = W <= 700 ? 0.8 : 1;
     const hubOuter = (14 + Math.sin(t * 3.2) * 2.4) * hubScale;
     const hubCore = (5.3 + Math.sin(t * 4.3) * 1.1) * hubScale;
     const halo = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8));
