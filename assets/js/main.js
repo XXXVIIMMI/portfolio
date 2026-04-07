@@ -264,81 +264,128 @@
       }
     }
 
-    // Bright right-side hub connected to output layer
-    const hubX = W * (isLiteDevice ? 0.955 : 0.975);
-    const hubY = H * 0.5;
-    const beat = Math.max(0, Math.sin(t * 5.4));
+    // Right-side atom-style hub
+    const hubX = W * (isLiteDevice ? 0.905 : 0.94);
+    const hubY = H * 0.5 + Math.sin(t * 1.35) * 1.8;
+    const beat = Math.max(0, Math.sin(t * 5.2));
     const hubPulse = Math.pow(beat, 3);
-    const hubCore = { r: 255, g: 246, b: 170 };
-    const hubShell = { r: 255, g: 218, b: 110 };
+    const hubCore = { r: 255, g: 228, b: 150 };
+    const hubShell = { r: 237, g: 180, b: 92 };
+    const hubBlue = { r: 108, g: 182, b: 255 };
+    const hubBlueSoft = { r: 86, g: 152, b: 230 };
     const outLayer = nodes[LAYERS.length - 1];
 
     for(let i=0;i<outLayer.length;i++){
       const n = outLayer[i];
       const grad = ctx.createLinearGradient(n.x, n.y, hubX, hubY);
       grad.addColorStop(0, rgba(n.col, 0.34 + n.act * 0.2));
-      grad.addColorStop(1, rgba(hubShell, 0.78 + hubPulse * 0.22));
+      grad.addColorStop(1, rgba(hubShell, 0.64 + hubPulse * 0.2));
       ctx.beginPath();
       ctx.moveTo(n.x, n.y);
       ctx.lineTo(hubX, hubY);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.28;
+      ctx.lineWidth = 1.18;
       ctx.stroke();
     }
 
-    const pointGlowRadius = (isLiteDevice ? 7 : 9) + hubPulse * 2.8;
-    const pointGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, pointGlowRadius);
-    pointGlow.addColorStop(0, rgba(hubCore, 0.84));
-    pointGlow.addColorStop(0.34, rgba(hubShell, 0.56 + hubPulse * 0.14));
-    pointGlow.addColorStop(1, rgba(hubCore, 0));
+    const amberAuraR = (isLiteDevice ? 18 : 25) + hubPulse * 4.6;
+    const blueAuraR = (isLiteDevice ? 20 : 28) + hubPulse * 5.4;
+
+    const amberAura = ctx.createRadialGradient(hubX + 2, hubY + 1, 0, hubX + 2, hubY + 1, amberAuraR);
+    amberAura.addColorStop(0, rgba(hubCore, 0.5));
+    amberAura.addColorStop(0.55, rgba(hubShell, 0.2));
+    amberAura.addColorStop(1, rgba(hubShell, 0));
     ctx.beginPath();
-    ctx.arc(hubX, hubY, pointGlowRadius, 0, Math.PI * 2);
-    ctx.fillStyle = pointGlow;
+    ctx.arc(hubX + 2, hubY + 1, amberAuraR, 0, Math.PI * 2);
+    ctx.fillStyle = amberAura;
+    ctx.fill();
+
+    const blueAura = ctx.createRadialGradient(hubX - 8, hubY - 2, 0, hubX - 8, hubY - 2, blueAuraR);
+    blueAura.addColorStop(0, rgba(hubBlue, 0.3));
+    blueAura.addColorStop(0.6, rgba(hubBlueSoft, 0.12));
+    blueAura.addColorStop(1, rgba(hubBlueSoft, 0));
+    ctx.beginPath();
+    ctx.arc(hubX - 8, hubY - 2, blueAuraR, 0, Math.PI * 2);
+    ctx.fillStyle = blueAura;
+    ctx.fill();
+
+    // Core nucleus with bright inner center and warm shell
+    const coreR = isLiteDevice ? 5.4 : 7.1;
+    const coreGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, coreR * 2.8);
+    coreGlow.addColorStop(0, rgba({r:255,g:246,b:194}, 0.98));
+    coreGlow.addColorStop(0.42, rgba(hubCore, 0.58));
+    coreGlow.addColorStop(1, rgba(hubCore, 0));
+    ctx.beginPath();
+    ctx.arc(hubX, hubY, coreR * 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = coreGlow;
     ctx.fill();
 
     ctx.beginPath();
-    ctx.arc(hubX, hubY, isLiteDevice ? 4.2 : 5.8, 0, Math.PI * 2);
-    ctx.fillStyle = rgba(hubCore, 1);
+    ctx.arc(hubX, hubY, coreR, 0, Math.PI * 2);
+    ctx.fillStyle = rgba({r:255,g:240,b:176}, 1);
     ctx.fill();
 
-    // Two rotating circles around the hub point
-    const ring1Radius = (isLiteDevice ? 7 : 9) + hubPulse * 2.6;
-    const ring2Radius = (isLiteDevice ? 10.6 : 13.4) + hubPulse * 3.4;
-    const spinA = t * 3.4;
-    const spinB = -t * 2.7;
+    const orbits = [
+      {
+        rx:(isLiteDevice ? 12.8 : 16.6) + hubPulse * 1.45 + Math.sin(t * 1.9) * 0.5,
+        ry:(isLiteDevice ? 7.4 : 9.8) + hubPulse * 1.05 + Math.cos(t * 1.6) * 0.36,
+        rot:t * 0.62 + 0.2,
+        col:hubShell,
+        glow:rgba(hubShell, 0.3),
+        speed:5.4,
+        phase:0.85,
+        trail:hubTrailA,
+        dotR:2.05
+      },
+      {
+        rx:(isLiteDevice ? 13.7 : 18.2) + hubPulse * 1.65 + Math.cos(t * 1.7) * 0.56,
+        ry:(isLiteDevice ? 6.6 : 8.8) + hubPulse * 1.02 + Math.sin(t * 1.45) * 0.32,
+        rot:-0.98 + t * 0.5,
+        col:hubBlue,
+        glow:rgba(hubBlue, 0.25),
+        speed:-4.9,
+        phase:2.1,
+        trail:hubTrailB,
+        dotR:1.95
+      }
+    ];
 
-    ctx.beginPath();
-    ctx.arc(hubX, hubY, ring1Radius, spinA, spinA + Math.PI * 1.38);
-    ctx.strokeStyle = rgba(hubShell, 0.94 + hubPulse * 0.06);
-    ctx.lineWidth = 1.2 + hubPulse * 0.4;
-    ctx.stroke();
+    for(let i=0;i<orbits.length;i++){
+      const o = orbits[i];
 
-    ctx.beginPath();
-    ctx.arc(hubX, hubY, ring2Radius, spinB, spinB + Math.PI * 1.42);
-    ctx.strokeStyle = rgba(hubCore, 0.86 + hubPulse * 0.14);
-    ctx.lineWidth = 1.08 + hubPulse * 0.34;
-    ctx.stroke();
+      // Soft glow pass for each elliptical orbit
+      ctx.save();
+      ctx.translate(hubX, hubY);
+      ctx.rotate(o.rot);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = o.glow;
+      ctx.lineWidth = 2.1;
+      ctx.stroke();
 
-    // Moving dots with short tails on the rotating rings
-    const dotAang = spinA + Math.PI * 1.38;
-    const dotBang = spinB + Math.PI * 1.42;
-    const dotA = { x: hubX + Math.cos(dotAang) * ring1Radius, y: hubY + Math.sin(dotAang) * ring1Radius };
-    const dotB = { x: hubX + Math.cos(dotBang) * ring2Radius, y: hubY + Math.sin(dotBang) * ring2Radius };
+      // Sharp visible orbit stroke
+      ctx.beginPath();
+      ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = rgba(o.col, 0.72);
+      ctx.lineWidth = 0.95;
+      ctx.stroke();
+      ctx.restore();
 
-    pushTrail(hubTrailA, dotA.x, dotA.y, TRAIL_LEN + 4);
-    pushTrail(hubTrailB, dotB.x, dotB.y, TRAIL_LEN + 4);
-    drawTrail(hubTrailA, hubShell, 1.65, 0.45, 0.34);
-    drawTrail(hubTrailB, hubCore, 1.5, 0.4, 0.28);
+      // Orbital particle with history tail
+      const a = t * o.speed + o.phase;
+      const lx = Math.cos(a) * o.rx;
+      const ly = Math.sin(a) * o.ry;
+      const dx = hubX + lx * Math.cos(o.rot) - ly * Math.sin(o.rot);
+      const dy = hubY + lx * Math.sin(o.rot) + ly * Math.cos(o.rot);
 
-    ctx.beginPath();
-    ctx.arc(dotA.x, dotA.y, 1.9, 0, Math.PI * 2);
-    ctx.fillStyle = rgba(hubShell, 1);
-    ctx.fill();
+      pushTrail(o.trail, dx, dy, TRAIL_LEN + 6);
+      drawTrail(o.trail, o.col, 1.55, 0.36, 0.28);
 
-    ctx.beginPath();
-    ctx.arc(dotB.x, dotB.y, 1.7, 0, Math.PI * 2);
-    ctx.fillStyle = rgba(hubCore, 0.98);
-    ctx.fill();
+      ctx.beginPath();
+      ctx.arc(dx, dy, o.dotR, 0, Math.PI * 2);
+      ctx.fillStyle = rgba(o.col, 0.95);
+      ctx.fill();
+    }
 
     // Floating data particles
     for(let i=0;i<orbitParticles.length;i++){
