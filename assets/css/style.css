@@ -108,14 +108,14 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
   position:relative;overflow:hidden;padding:0 4rem;perspective:1300px;
   background:var(--ink2);
 }
-#nn-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;filter:saturate(1.28) contrast(1.12);}
+#nn-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;filter:saturate(1.48) contrast(1.22) brightness(1.16);}
 
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
   background:
-    radial-gradient(circle at 18% 24%,rgba(196,150,90,0.09) 0%,rgba(196,150,90,0) 42%),
-    radial-gradient(circle at 78% 20%,rgba(255,255,255,0.04) 0%,rgba(255,255,255,0) 40%),
-    linear-gradient(135deg,rgba(17,17,21,0.9) 0%,rgba(17,17,21,0.72) 55%,rgba(17,17,21,0.58) 100%);
+    radial-gradient(circle at 18% 24%,rgba(196,150,90,0.14) 0%,rgba(196,150,90,0) 46%),
+    radial-gradient(circle at 78% 20%,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0) 44%),
+    linear-gradient(135deg,rgba(17,17,21,0.7) 0%,rgba(17,17,21,0.5) 55%,rgba(17,17,21,0.36) 100%);
   animation:overlayFlow 16s ease-in-out infinite alternate;
 }
 

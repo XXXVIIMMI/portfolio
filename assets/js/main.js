@@ -112,9 +112,9 @@
     ctx.lineJoin = 'round';
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
-    bgGlow.addColorStop(0, 'rgba(123,198,255,0.04)');
-    bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.06)');
-    bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.02)');
+    bgGlow.addColorStop(0, 'rgba(123,198,255,0.08)');
+    bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.11)');
+    bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.05)');
     bgGlow.addColorStop(1, 'rgba(9,9,11,0)');
     ctx.fillStyle = bgGlow;
     ctx.fillRect(0, 0, W, H);
@@ -123,7 +123,7 @@
     for(let l=0;l<LAYERS.length;l++)
       for(let n=0;n<LAYERS[l];n++){
         const nd = nodes[l][n];
-        nd.act = 0.44 + 0.56*Math.abs(Math.sin(t*0.9 + nd.phase));
+        nd.act = 0.62 + 0.52*Math.abs(Math.sin(t*0.9 + nd.phase));
       }
 
     // Draw edges
@@ -131,18 +131,18 @@
       for(let a=0;a<LAYERS[l];a++){
         for(let b=0;b<LAYERS[l+1];b++){
           const n1=nodes[l][a], n2=nodes[l+1][b];
-          const alpha = 0.05 + 0.055*n1.act*n2.act;
+          const alpha = 0.11 + 0.1*n1.act*n2.act;
           const mid = lerpColor(n1.col, n2.col, 0.5);
           const grad = ctx.createLinearGradient(n1.x,n1.y,n2.x,n2.y);
           grad.addColorStop(0, rgba(n1.col, alpha));
           grad.addColorStop(0.4, rgba(mid, alpha*1.12));
-          grad.addColorStop(0.68, 'rgba(245,236,223,0.08)');
+          grad.addColorStop(0.68, 'rgba(245,236,223,0.18)');
           grad.addColorStop(1, rgba(n2.col, alpha));
           ctx.save();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 1.08; ctx.globalAlpha = 0.22; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 1.28; ctx.globalAlpha = 0.42; ctx.stroke();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 0.72; ctx.globalAlpha = 1; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 0.95; ctx.globalAlpha = 1; ctx.stroke();
           ctx.restore();
         }
       }
@@ -155,10 +155,10 @@
       const px=n1.x+(n2.x-n1.x)*p.prog;
       const py=n1.y+(n2.y-n1.y)*p.prog;
       const col = lerpColor(p.colA, p.colB, p.prog);
-      const pulseR = 8.2;
+      const pulseR = 5.8;
       const g = ctx.createRadialGradient(px,py,0,px,py,pulseR);
       g.addColorStop(0, rgba(col, 1));
-      g.addColorStop(0.35, rgba(col, 0.5));
+      g.addColorStop(0.35, rgba(col, 0.3));
       g.addColorStop(1, rgba(col, 0));
       ctx.beginPath(); ctx.arc(px,py,pulseR,0,Math.PI*2);
       ctx.fillStyle=g; ctx.fill();
@@ -167,9 +167,9 @@
       const ty=n1.y+(n2.y-n1.y)*Math.max(0,p.prog-0.12);
       const tg = ctx.createLinearGradient(tx,ty,px,py);
       tg.addColorStop(0, rgba(col,0));
-      tg.addColorStop(1, rgba(col,0.4));
+      tg.addColorStop(1, rgba(col,0.26));
       ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(px,py);
-      ctx.strokeStyle=tg; ctx.lineWidth=2; ctx.stroke();
+      ctx.strokeStyle=tg; ctx.lineWidth=1.35; ctx.stroke();
       p.prog += p.speed;
     });
     pulses = pulses.filter(p=>{
@@ -188,24 +188,24 @@
         const sx = nd.x + Math.sin(t*0.55+nd.phase)*0.85;
         const sy = nd.y + Math.cos(t*0.48+nd.phase*1.1)*0.85;
         const r = l === 0 || l === LAYERS.length - 1 ? 4.2 + act*1.1 : 3.2 + act*1.0;
-        const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*4);
-        glow.addColorStop(0, rgba(nd.col, 0.34*act));
-        glow.addColorStop(0.42, 'rgba(245,236,223,0.08)');
+        const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.4);
+        glow.addColorStop(0, rgba(nd.col, 0.3*act));
+        glow.addColorStop(0.42, 'rgba(245,236,223,0.06)');
         glow.addColorStop(1, rgba(nd.col, 0));
-        ctx.beginPath(); ctx.arc(sx,sy,r*4,0,Math.PI*2);
+        ctx.beginPath(); ctx.arc(sx,sy,r*2.4,0,Math.PI*2);
         ctx.fillStyle=glow; ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(sx,sy,r+1.2,0,Math.PI*2);
-        ctx.strokeStyle = rgba(nd.col, 0.92);
-        ctx.lineWidth = 1.05;
+        ctx.arc(sx,sy,r+1,0,Math.PI*2);
+        ctx.strokeStyle = rgba(nd.col, 1);
+        ctx.lineWidth = 1.34;
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(sx,sy,r*0.72,0,Math.PI*2);
+        ctx.arc(sx,sy,r*0.82,0,Math.PI*2);
         ctx.fillStyle = l === LAYERS.length - 1
-          ? rgba({r:255,g:241,b:163}, 0.95*act)
-          : (l === 0 ? rgba({r:208,g:255,b:196}, 0.9*act) : rgba({r:255,g:255,b:255}, 0.86*act));
+          ? rgba({r:255,g:250,b:196}, 1)
+          : (l === 0 ? rgba({r:228,g:255,b:216}, 0.98) : rgba({r:255,g:255,b:255}, 0.98));
         ctx.fill();
       }
     }
@@ -222,19 +222,20 @@
     for(let i=0;i<outLayer.length;i++){
       const n = outLayer[i];
       const grad = ctx.createLinearGradient(n.x, n.y, hubX, hubY);
-      grad.addColorStop(0, rgba(n.col, 0.16 + n.act * 0.12));
-      grad.addColorStop(1, rgba(hubShell, 0.4 + hubPulse * 0.44));
+      grad.addColorStop(0, rgba(n.col, 0.34 + n.act * 0.2));
+      grad.addColorStop(1, rgba(hubShell, 0.78 + hubPulse * 0.22));
       ctx.beginPath();
       ctx.moveTo(n.x, n.y);
       ctx.lineTo(hubX, hubY);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 0.9;
+      ctx.lineWidth = 1.28;
       ctx.stroke();
     }
 
-    const pointGlowRadius = (isLiteDevice ? 9 : 12) + hubPulse * 4;
+    const pointGlowRadius = (isLiteDevice ? 7 : 9) + hubPulse * 2.8;
     const pointGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, pointGlowRadius);
-    pointGlow.addColorStop(0, rgba(hubCore, 0.84 + hubPulse * 0.16));
+    pointGlow.addColorStop(0, rgba(hubCore, 0.84));
+    pointGlow.addColorStop(0.34, rgba(hubShell, 0.56 + hubPulse * 0.14));
     pointGlow.addColorStop(1, rgba(hubCore, 0));
     ctx.beginPath();
     ctx.arc(hubX, hubY, pointGlowRadius, 0, Math.PI * 2);
@@ -242,7 +243,7 @@
     ctx.fill();
 
     ctx.beginPath();
-    ctx.arc(hubX, hubY, isLiteDevice ? 3.4 : 4.4, 0, Math.PI * 2);
+    ctx.arc(hubX, hubY, isLiteDevice ? 4.2 : 5.8, 0, Math.PI * 2);
     ctx.fillStyle = rgba(hubCore, 1);
     ctx.fill();
 
@@ -254,15 +255,56 @@
 
     ctx.beginPath();
     ctx.arc(hubX, hubY, ring1Radius, spinA, spinA + Math.PI * 1.38);
-    ctx.strokeStyle = rgba(hubShell, 0.82 + hubPulse * 0.16);
-    ctx.lineWidth = 1.05 + hubPulse * 0.35;
+    ctx.strokeStyle = rgba(hubShell, 0.94 + hubPulse * 0.06);
+    ctx.lineWidth = 1.2 + hubPulse * 0.4;
     ctx.stroke();
 
     ctx.beginPath();
     ctx.arc(hubX, hubY, ring2Radius, spinB, spinB + Math.PI * 1.42);
-    ctx.strokeStyle = rgba(hubCore, 0.7 + hubPulse * 0.2);
-    ctx.lineWidth = 0.95 + hubPulse * 0.3;
+    ctx.strokeStyle = rgba(hubCore, 0.86 + hubPulse * 0.14);
+    ctx.lineWidth = 1.08 + hubPulse * 0.34;
     ctx.stroke();
+
+    // Moving dots with short tails on the rotating rings
+    const dotAang = spinA + Math.PI * 1.38;
+    const dotBang = spinB + Math.PI * 1.42;
+    const dotA = { x: hubX + Math.cos(dotAang) * ring1Radius, y: hubY + Math.sin(dotAang) * ring1Radius };
+    const dotB = { x: hubX + Math.cos(dotBang) * ring2Radius, y: hubY + Math.sin(dotBang) * ring2Radius };
+
+    const tailAang = dotAang - 0.42;
+    const tailBang = dotBang + 0.42;
+    const tailA = { x: hubX + Math.cos(tailAang) * ring1Radius, y: hubY + Math.sin(tailAang) * ring1Radius };
+    const tailB = { x: hubX + Math.cos(tailBang) * ring2Radius, y: hubY + Math.sin(tailBang) * ring2Radius };
+
+    const tailGradA = ctx.createLinearGradient(tailA.x, tailA.y, dotA.x, dotA.y);
+    tailGradA.addColorStop(0, rgba(hubShell, 0));
+    tailGradA.addColorStop(1, rgba(hubShell, 0.9));
+    ctx.beginPath();
+    ctx.moveTo(tailA.x, tailA.y);
+    ctx.lineTo(dotA.x, dotA.y);
+    ctx.strokeStyle = tailGradA;
+    ctx.lineWidth = 1.45;
+    ctx.stroke();
+
+    const tailGradB = ctx.createLinearGradient(tailB.x, tailB.y, dotB.x, dotB.y);
+    tailGradB.addColorStop(0, rgba(hubCore, 0));
+    tailGradB.addColorStop(1, rgba(hubCore, 0.84));
+    ctx.beginPath();
+    ctx.moveTo(tailB.x, tailB.y);
+    ctx.lineTo(dotB.x, dotB.y);
+    ctx.strokeStyle = tailGradB;
+    ctx.lineWidth = 1.25;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(dotA.x, dotA.y, 1.9, 0, Math.PI * 2);
+    ctx.fillStyle = rgba(hubShell, 1);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(dotB.x, dotB.y, 1.7, 0, Math.PI * 2);
+    ctx.fillStyle = rgba(hubCore, 0.98);
+    ctx.fill();
 
     // Floating data particles
     const particleCount = isLiteDevice ? 8 : 14;
@@ -272,7 +314,7 @@
       const px = W*0.5 + Math.cos(angle)*radius;
       const py = H*0.5 + Math.sin(angle*0.8)*H*0.28;
       const col = PALETTE[i % PALETTE.length];
-      const a = 0.02 + 0.03*Math.abs(Math.sin(t+i*0.6));
+      const a = 0.04 + 0.05*Math.abs(Math.sin(t+i*0.6));
       ctx.beginPath(); ctx.arc(px,py,1.5,0,Math.PI*2);
       ctx.fillStyle=rgba(col,a); ctx.fill();
     }
