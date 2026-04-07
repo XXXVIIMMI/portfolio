@@ -37,6 +37,7 @@
   let nodes = [];
   let pulses = [];
   let orbitParticles = [];
+  let hubParticles = [];
   const hubTrailA = [];
   const hubTrailB = [];
 
@@ -113,6 +114,20 @@
         col:PALETTE[i % PALETTE.length],
         history:[]
       });
+    }
+
+    hubParticles = [];
+    const outputCount = LAYERS[LAYERS.length - 1];
+    for(let i=0;i<outputCount;i++){
+      const base = {
+        sourceIndex:i,
+        speed:(isLiteDevice ? 0.0085 : 0.011) + i * 0.0017,
+        phase:i * 0.9,
+        col:layerPalette(LAYERS.length - 1)[i % 3],
+        history:[]
+      };
+      hubParticles.push({...base, progress:(i / outputCount) * 0.55});
+      hubParticles.push({...base, progress:((i / outputCount) * 0.55 + 0.42) % 1, phase:base.phase + 1.2, speed:base.speed * 0.92, col:layerPalette(LAYERS.length - 1)[(i + 1) % 3], history:[]});
     }
   }
 
@@ -367,6 +382,45 @@
       ctx.beginPath();
       ctx.arc(dx, dy, o.dotR, 0, Math.PI * 2);
       ctx.fillStyle = rgba({r:255,g:255,b:255}, 0.96);
+      ctx.fill();
+    }
+
+    // Particles traveling from the last column into the hub
+    for(let i=0;i<hubParticles.length;i++){
+      const p = hubParticles[i];
+      const source = outLayer[p.sourceIndex % outLayer.length];
+      const startX = source.x;
+      const startY = source.y;
+      const endX = hubX;
+      const endY = hubY;
+
+      p.progress += p.speed;
+      if(p.progress > 1){
+        p.progress = 0;
+        p.history.length = 0;
+      }
+
+      const eased = 1 - Math.pow(1 - p.progress, 2.2);
+      const px = startX + (endX - startX) * eased;
+      const py = startY + (endY - startY) * eased;
+
+      pushTrail(p.history, px, py, TRAIL_LEN + 4);
+      const tailAlpha = p.phase % 2 > 1 ? 0.48 : 0.64;
+      drawTrail(p.history, p.col, 2.45, 0.24, tailAlpha);
+
+      const trailLead = ctx.createLinearGradient(startX, startY, px, py);
+      trailLead.addColorStop(0, rgba(p.col, 0));
+      trailLead.addColorStop(1, rgba({r:255,g:255,b:255}, p.phase % 2 > 1 ? 0.8 : 1));
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(px, py);
+      ctx.strokeStyle = trailLead;
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(px, py, 1.7, 0, Math.PI * 2);
+      ctx.fillStyle = rgba({r:255,g:255,b:255}, p.phase % 2 > 1 ? 0.82 : 1);
       ctx.fill();
     }
 
