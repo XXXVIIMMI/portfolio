@@ -305,6 +305,24 @@ const io = new IntersectionObserver(es=>{
 },{threshold:0.1});
 document.querySelectorAll('.sr').forEach(el=>io.observe(el));
 
+// ── MOBILE NAV TOGGLE ──
+const nav = document.getElementById('nav');
+const navToggle = document.querySelector('.nav-toggle');
+const navLinksPanel = document.getElementById('nav-links');
+if(nav && navToggle && navLinksPanel){
+  navToggle.addEventListener('click', ()=>{
+    const open = nav.classList.toggle('menu-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  navLinksPanel.querySelectorAll('a').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      nav.classList.remove('menu-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
 // ── NAV ACTIVE LINK ──
 const secs = document.querySelectorAll('section[id]');
 const navAs = document.querySelectorAll('.nav-links a:not(.nav-hire)');
@@ -324,6 +342,10 @@ window.addEventListener('scroll',()=>{
   const pct = curr/total*100;
   document.documentElement.style.setProperty('--scroll-progress', pct+'%');
   document.getElementById('nav').classList.toggle('scrolled', curr>20);
+  if(curr > 40 && nav?.classList.contains('menu-open')){
+    nav.classList.remove('menu-open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+  }
 },{ passive:true });
 
 // ── HERO PARALLAX ON MOUSE ──
