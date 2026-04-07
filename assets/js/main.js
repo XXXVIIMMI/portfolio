@@ -33,8 +33,12 @@
 
   // Network layers: input(4), three hidden(6 each), output(3)
   const LAYERS = [4, 6, 6, 6, 3];
+  const TRAIL_LEN = isLiteDevice ? 12 : 20;
   let nodes = [];
   let pulses = [];
+  let orbitParticles = [];
+  const hubTrailA = [];
+  const hubTrailB = [];
 
   function layerPalette(layerIndex){
     const last = LAYERS.length - 1;
@@ -94,6 +98,60 @@
         nodes[l].push({x: rawX, y: rawY, col, phase: l*1.3+n*0.75, act:0, layer:l, index:n});
       }
     }
+
+    orbitParticles = [];
+    const particleCount = isLiteDevice ? 8 : 14;
+    for(let i=0;i<particleCount;i++){
+      orbitParticles.push({
+        angleSeed:(i/particleCount)*Math.PI*2,
+        speed:0.11 + (i % 5) * 0.018,
+        wobble:0.28 + (i % 4) * 0.07,
+        radiusBase:0.24 + (i % 6) * 0.012,
+        radiusAmp:0.026 + (i % 3) * 0.01,
+        yStretch:0.76 + (i % 4) * 0.05,
+        phase:i * 0.7,
+        col:PALETTE[i % PALETTE.length],
+        history:[]
+      });
+    }
+  }
+
+  function pushTrail(history, x, y, maxLen){
+    history.push({x, y});
+    if(history.length > maxLen) history.shift();
+  }
+
+  function smoothTrail(history, lerpAmt){
+    if(history.length === 0) return history;
+    const out = [];
+    let sx = history[0].x;
+    let sy = history[0].y;
+    out.push({x:sx, y:sy});
+    for(let i=1;i<history.length;i++){
+      sx += (history[i].x - sx) * lerpAmt;
+      sy += (history[i].y - sy) * lerpAmt;
+      out.push({x:sx, y:sy});
+    }
+    return out;
+  }
+
+  function drawTrail(history, col, headWidth, tailWidth, maxAlpha){
+    if(history.length < 2) return;
+    const pts = smoothTrail(history, 0.42);
+    const segs = pts.length - 1;
+    for(let i=1;i<pts.length;i++){
+      const p0 = pts[i-1];
+      const p1 = pts[i];
+      const u = i / segs;
+      const alpha = 0.02 + maxAlpha * u;
+      const width = tailWidth + (headWidth - tailWidth) * u;
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.strokeStyle = rgba(col, alpha);
+      ctx.lineWidth = width;
+      ctx.stroke();
+    }
   }
 
   function spawnPulse(){
@@ -102,7 +160,7 @@
     const ti = Math.floor(Math.random()*LAYERS[l+1]);
     const colA = nodes[l][fi].col;
     const colB = nodes[l+1][ti].col;
-    pulses.push({mode:'edge', l, fi, ti, prog:0, speed:0.007+Math.random()*0.013, colA, colB});
+    pulses.push({mode:'edge', l, fi, ti, prog:0, speed:0.007+Math.random()*0.013, colA, colB, history:[]});
   }
 
   function draw(){
@@ -155,6 +213,10 @@
       const px=n1.x+(n2.x-n1.x)*p.prog;
       const py=n1.y+(n2.y-n1.y)*p.prog;
       const col = lerpColor(p.colA, p.colB, p.prog);
+
+      pushTrail(p.history, px, py, TRAIL_LEN);
+      drawTrail(p.history, col, 1.85, 0.4, 0.38);
+
       const pulseR = 5.8;
       const g = ctx.createRadialGradient(px,py,0,px,py,pulseR);
       g.addColorStop(0, rgba(col, 1));
@@ -162,14 +224,6 @@
       g.addColorStop(1, rgba(col, 0));
       ctx.beginPath(); ctx.arc(px,py,pulseR,0,Math.PI*2);
       ctx.fillStyle=g; ctx.fill();
-      // trail
-      const tx=n1.x+(n2.x-n1.x)*Math.max(0,p.prog-0.12);
-      const ty=n1.y+(n2.y-n1.y)*Math.max(0,p.prog-0.12);
-      const tg = ctx.createLinearGradient(tx,ty,px,py);
-      tg.addColorStop(0, rgba(col,0));
-      tg.addColorStop(1, rgba(col,0.26));
-      ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(px,py);
-      ctx.strokeStyle=tg; ctx.lineWidth=1.35; ctx.stroke();
       p.prog += p.speed;
     });
     pulses = pulses.filter(p=>{
@@ -271,30 +325,10 @@
     const dotA = { x: hubX + Math.cos(dotAang) * ring1Radius, y: hubY + Math.sin(dotAang) * ring1Radius };
     const dotB = { x: hubX + Math.cos(dotBang) * ring2Radius, y: hubY + Math.sin(dotBang) * ring2Radius };
 
-    const tailAang = dotAang - 0.42;
-    const tailBang = dotBang + 0.42;
-    const tailA = { x: hubX + Math.cos(tailAang) * ring1Radius, y: hubY + Math.sin(tailAang) * ring1Radius };
-    const tailB = { x: hubX + Math.cos(tailBang) * ring2Radius, y: hubY + Math.sin(tailBang) * ring2Radius };
-
-    const tailGradA = ctx.createLinearGradient(tailA.x, tailA.y, dotA.x, dotA.y);
-    tailGradA.addColorStop(0, rgba(hubShell, 0));
-    tailGradA.addColorStop(1, rgba(hubShell, 0.9));
-    ctx.beginPath();
-    ctx.moveTo(tailA.x, tailA.y);
-    ctx.lineTo(dotA.x, dotA.y);
-    ctx.strokeStyle = tailGradA;
-    ctx.lineWidth = 1.45;
-    ctx.stroke();
-
-    const tailGradB = ctx.createLinearGradient(tailB.x, tailB.y, dotB.x, dotB.y);
-    tailGradB.addColorStop(0, rgba(hubCore, 0));
-    tailGradB.addColorStop(1, rgba(hubCore, 0.84));
-    ctx.beginPath();
-    ctx.moveTo(tailB.x, tailB.y);
-    ctx.lineTo(dotB.x, dotB.y);
-    ctx.strokeStyle = tailGradB;
-    ctx.lineWidth = 1.25;
-    ctx.stroke();
+    pushTrail(hubTrailA, dotA.x, dotA.y, TRAIL_LEN + 4);
+    pushTrail(hubTrailB, dotB.x, dotB.y, TRAIL_LEN + 4);
+    drawTrail(hubTrailA, hubShell, 1.65, 0.45, 0.34);
+    drawTrail(hubTrailB, hubCore, 1.5, 0.4, 0.28);
 
     ctx.beginPath();
     ctx.arc(dotA.x, dotA.y, 1.9, 0, Math.PI * 2);
@@ -307,16 +341,21 @@
     ctx.fill();
 
     // Floating data particles
-    const particleCount = isLiteDevice ? 8 : 14;
-    for(let i=0;i<particleCount;i++){
-      const angle=(i/particleCount)*Math.PI*2 + t*0.12 + Math.sin(t*0.3+i)*0.4;
-      const radius = W*0.28 + Math.sin(t*0.5+i*0.7)*W*0.05;
-      const px = W*0.5 + Math.cos(angle)*radius;
-      const py = H*0.5 + Math.sin(angle*0.8)*H*0.28;
-      const col = PALETTE[i % PALETTE.length];
-      const a = 0.04 + 0.05*Math.abs(Math.sin(t+i*0.6));
-      ctx.beginPath(); ctx.arc(px,py,1.5,0,Math.PI*2);
-      ctx.fillStyle=rgba(col,a); ctx.fill();
+    for(let i=0;i<orbitParticles.length;i++){
+      const p = orbitParticles[i];
+      const angle = p.angleSeed + t * p.speed + Math.sin(t * 0.3 + p.phase) * p.wobble;
+      const radius = W * p.radiusBase + Math.sin(t * 0.5 + p.phase) * W * p.radiusAmp;
+      const px = W * 0.5 + Math.cos(angle) * radius;
+      const py = H * 0.5 + Math.sin(angle * p.yStretch) * H * 0.28;
+      const headAlpha = 0.07 + 0.07 * Math.abs(Math.sin(t + p.phase));
+
+      pushTrail(p.history, px, py, TRAIL_LEN);
+      drawTrail(p.history, p.col, 1.35, 0.32, 0.2);
+
+      ctx.beginPath();
+      ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = rgba(p.col, headAlpha);
+      ctx.fill();
     }
 
     animId = requestAnimationFrame(draw);
