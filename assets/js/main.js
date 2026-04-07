@@ -32,35 +32,28 @@
   }
 
   // Network layers
-  const LAYERS = isLiteDevice ? [2, 4, 6, 7, 6, 4, 2] : [3, 6, 9, 11, 9, 6, 3];
+  const LAYERS = isLiteDevice ? [4, 5, 6, 5, 3] : [4, 6, 8, 6, 3];
   let nodes = [];
   let pulses = [];
 
-  function hubPoint(){
-    const isNarrow = W <= 700;
-    const edgePad = isNarrow ? 96 : Math.max(46, W * 0.07);
-    const driftX = isNarrow ? 1.2 : 3;
-    const driftY = isNarrow ? 2.2 : 4;
-    const baseY = isNarrow ? H * 0.24 : H * 0.5;
-    const safeTopY = isNarrow ? 92 : 0;
-    const safeBottomY = isNarrow ? Math.max(160, H * 0.36) : H;
-    const hubY = baseY + Math.cos(t * 0.42) * driftY;
-    return {
-      x: W - edgePad + Math.sin(t * 0.5) * driftX,
-      y: Math.min(safeBottomY, Math.max(safeTopY, hubY))
-    };
-  }
-
-  function networkCenter(){
-    const isNarrow = W <= 700;
-    const centerX = isNarrow ? W * 0.19 : W * 0.61;
-    const driftX = isNarrow ? 2.2 : 5;
-    const driftY = isNarrow ? 2.4 : 4;
-    const centerY = isNarrow ? H * 0.26 : H * 0.5;
-    return {
-      x: centerX + Math.sin(t * 0.25) * driftX,
-      y: centerY + Math.cos(t * 0.21) * driftY
-    };
+  function layerPalette(layerIndex){
+    const last = LAYERS.length - 1;
+    if(layerIndex === 0) return [
+      {r:170,g:241,b:168},
+      {r:143,g:232,b:140},
+      {r:198,g:245,b:170}
+    ];
+    if(layerIndex === last) return [
+      {r:244,g:223,b:82},
+      {r:247,g:206,b:60},
+      {r:255,g:233,b:131}
+    ];
+    return [
+      {r:123,g:198,b:255},
+      {r:96,g:165,b:250},
+      {r:80,g:188,b:168},
+      {r:217,g:174,b:120}
+    ];
   }
 
   function resize(){
@@ -71,25 +64,30 @@
 
   function buildNodes(){
     nodes = [];
-    const center = networkCenter();
     const isNarrow = W <= 700;
-    const maxRadius = Math.min(W, H) * (isNarrow ? 0.18 : 0.23);
-    const nodePad = isNarrow ? 20 : 12;
-    const nodeTopPad = isNarrow ? 86 : nodePad;
-    const nodeBottomPad = isNarrow ? Math.max(156, H * 0.4) : H - nodePad;
+    const leftPad = isNarrow ? W * 0.06 : W * 0.08;
+    const rightPad = isNarrow ? W * 0.08 : W * 0.1;
+    const topPad = isNarrow ? H * 0.14 : H * 0.1;
+    const bottomPad = isNarrow ? H * 0.18 : H * 0.12;
+    const usableHeight = Math.max(120, H - topPad - bottomPad);
+    const usableWidth = Math.max(120, W - leftPad - rightPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
       const count = LAYERS[l];
-      const ringT = l / (LAYERS.length - 1);
-      const radius = maxRadius * (1 - ringT * 0.78) + 12;
+      const layerT = LAYERS.length === 1 ? 0 : l / (LAYERS.length - 1);
+      const x = leftPad + usableWidth * layerT;
+      const palette = layerPalette(l);
+      const jitterX = isNarrow ? 1.4 : 2.2;
+      const jitterY = isNarrow ? 1.8 : 2.8;
+      const spread = count > 1 ? usableHeight * (count <= 3 ? 0.42 : 0.68) : 0;
+      const top = H * 0.5 - spread * 0.5;
       for(let n=0;n<count;n++){
-        const angle = (Math.PI * 2 * n) / count + l * 0.22;
-        const rawX = center.x + Math.cos(angle) * radius;
-        const rawY = center.y + Math.sin(angle) * radius;
-        const x = Math.min(W - nodePad, Math.max(nodePad, rawX));
-        const y = Math.min(nodeBottomPad, Math.max(nodeTopPad, rawY));
-        const col = PALETTE[(l*3+n*2) % PALETTE.length];
-        nodes[l].push({x, y, col, phase: l*1.7+n*0.9, act:0, angle, radius});
+        const posT = count === 1 ? 0.5 : n / (count - 1);
+        const baseY = count === 1 ? H * 0.5 : top + spread * posT;
+        const rawX = x + Math.sin((l + n) * 1.3 + t * 0.2) * jitterX;
+        const rawY = baseY + Math.cos((l * 0.8 + n) * 1.1 + t * 0.24) * jitterY;
+        const col = palette[(n + l) % palette.length];
+        nodes[l].push({x: rawX, y: rawY, col, phase: l*1.3+n*0.75, act:0, layer:l, index:n});
       }
     }
   }
@@ -103,58 +101,25 @@
     pulses.push({mode:'edge', l, fi, ti, prog:0, speed:0.007+Math.random()*0.013, colA, colB});
   }
 
-  function spawnHubPulse(){
-    const l = Math.floor(Math.random()*LAYERS.length);
-    const ni = Math.floor(Math.random()*LAYERS[l]);
-    const nd = nodes[l][ni];
-    pulses.push({
-      mode:'hub',
-      l,
-      ni,
-      prog:0,
-      speed:0.01+Math.random()*0.012,
-      colA: nd.col,
-      colB: {r:56,g:189,b:248}
-    });
-  }
-
   function draw(){
     ctx.clearRect(0,0,W,H);
     t += 0.007;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    const bgGlow = ctx.createRadialGradient(W * 0.42, H * 0.26, 0, W * 0.42, H * 0.26, Math.max(W, H) * 0.75);
-    bgGlow.addColorStop(0, 'rgba(196,150,90,0.04)');
-    bgGlow.addColorStop(0.45, 'rgba(80,188,168,0.02)');
+    const bgGlow = ctx.createRadialGradient(W * 0.28, H * 0.34, 0, W * 0.28, H * 0.34, Math.max(W, H) * 0.88);
+    bgGlow.addColorStop(0, 'rgba(123,198,255,0.04)');
+    bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.06)');
+    bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.02)');
     bgGlow.addColorStop(1, 'rgba(9,9,11,0)');
     ctx.fillStyle = bgGlow;
     ctx.fillRect(0, 0, W, H);
-
-    ctx.save();
-    ctx.globalAlpha = 0.2;
-    ctx.strokeStyle = 'rgba(245,236,223,0.12)';
-    ctx.lineWidth = 0.6;
-    const gridStep = W <= 700 ? 34 : 52;
-    for(let gx = 0; gx < W; gx += gridStep){
-      ctx.beginPath();
-      ctx.moveTo(gx, 0);
-      ctx.lineTo(gx, H);
-      ctx.stroke();
-    }
-    for(let gy = 0; gy < H; gy += gridStep){
-      ctx.beginPath();
-      ctx.moveTo(0, gy);
-      ctx.lineTo(W, gy);
-      ctx.stroke();
-    }
-    ctx.restore();
 
     // Animate activations
     for(let l=0;l<LAYERS.length;l++)
       for(let n=0;n<LAYERS[l];n++){
         const nd = nodes[l][n];
-        nd.act = 0.4 + 0.6*Math.abs(Math.sin(t*0.9 + nd.phase));
+        nd.act = 0.44 + 0.56*Math.abs(Math.sin(t*0.9 + nd.phase));
       }
 
     // Draw edges
@@ -162,69 +127,31 @@
       for(let a=0;a<LAYERS[l];a++){
         for(let b=0;b<LAYERS[l+1];b++){
           const n1=nodes[l][a], n2=nodes[l+1][b];
-          const alpha = 0.03 + 0.045*n1.act*n2.act;
+          const alpha = 0.05 + 0.055*n1.act*n2.act;
           const mid = lerpColor(n1.col, n2.col, 0.5);
           const grad = ctx.createLinearGradient(n1.x,n1.y,n2.x,n2.y);
           grad.addColorStop(0, rgba(n1.col, alpha));
-          grad.addColorStop(0.4, rgba(mid, alpha*1.25));
-          grad.addColorStop(0.62, 'rgba(245,236,223,0.06)');
+          grad.addColorStop(0.4, rgba(mid, alpha*1.12));
+          grad.addColorStop(0.68, 'rgba(245,236,223,0.08)');
           grad.addColorStop(1, rgba(n2.col, alpha));
           ctx.save();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 1.35; ctx.globalAlpha = 0.18; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 1.08; ctx.globalAlpha = 0.22; ctx.stroke();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 0.78; ctx.globalAlpha = 1; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 0.72; ctx.globalAlpha = 1; ctx.stroke();
           ctx.restore();
         }
       }
     }
 
-    // Circular geometry links (ring connections)
-    for(let l=0;l<LAYERS.length;l++){
-      const ring = nodes[l];
-      for(let n=0;n<ring.length;n++){
-        const n1 = ring[n];
-        const n2 = ring[(n + 1) % ring.length];
-        const alpha = 0.04 + 0.045 * n1.act;
-        const grad = ctx.createLinearGradient(n1.x,n1.y,n2.x,n2.y);
-        grad.addColorStop(0, rgba(n1.col, alpha));
-        grad.addColorStop(1, rgba(n2.col, alpha));
-        ctx.beginPath();
-        ctx.moveTo(n1.x, n1.y);
-        ctx.lineTo(n2.x, n2.y);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.72;
-        ctx.stroke();
-      }
-    }
-
-    // Hub convergence lines
-    const hub = hubPoint();
-    for(let l=0;l<LAYERS.length;l++){
-      for(let n=0;n<LAYERS[l];n++){
-        const nd = nodes[l][n];
-        const alpha = 0.014 + 0.03 * nd.act;
-        const grad = ctx.createLinearGradient(nd.x,nd.y,hub.x,hub.y);
-        grad.addColorStop(0, rgba(nd.col, alpha));
-        grad.addColorStop(1, 'rgba(245,236,223,0.16)');
-        ctx.beginPath();
-        ctx.moveTo(nd.x, nd.y);
-        ctx.lineTo(hub.x, hub.y);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 0.4;
-        ctx.stroke();
-      }
-    }
-
     // Draw pulses
     pulses.forEach(p=>{
-      const n1 = p.mode === 'hub' ? nodes[p.l][p.ni] : nodes[p.l][p.fi];
-      const hubPos = hubPoint();
-      const n2 = p.mode === 'hub' ? hubPos : nodes[p.l+1][p.ti];
+      const n1 = nodes[p.l][p.fi];
+      const n2 = nodes[p.l+1][p.ti];
       const px=n1.x+(n2.x-n1.x)*p.prog;
       const py=n1.y+(n2.y-n1.y)*p.prog;
       const col = lerpColor(p.colA, p.colB, p.prog);
-      const pulseR = p.mode === 'hub' ? 7 : 9;
+      const pulseR = 8.2;
       const g = ctx.createRadialGradient(px,py,0,px,py,pulseR);
       g.addColorStop(0, rgba(col, 1));
       g.addColorStop(0.35, rgba(col, 0.5));
@@ -248,103 +175,46 @@
       }
       return true;
     });
-    if(pulses.length < (isLiteDevice ? 10 : 18) && Math.random() < (isLiteDevice ? 0.14 : 0.22)) spawnPulse();
-    if(pulses.length < (isLiteDevice ? 14 : 26) && Math.random() < (isLiteDevice ? 0.1 : 0.18)) spawnHubPulse();
-
-    // Hub geometry
-    const hubScale = W <= 700 ? 0.9 : 1;
-    const hubOuter = (14 + Math.sin(t * 3.2) * 2.4) * hubScale;
-    const hubCore = (5.3 + Math.sin(t * 4.3) * 1.1) * hubScale;
-    const halo = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8));
-    halo.addColorStop(0, 'rgba(217,174,120,0.34)');
-    halo.addColorStop(0.4, 'rgba(80,188,168,0.08)');
-    halo.addColorStop(1, 'rgba(196,150,90,0)');
-    ctx.beginPath();
-    ctx.arc(hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8),0,Math.PI*2);
-    ctx.fillStyle = halo;
-    ctx.fill();
-
-    drawPolygon(hub.x, hub.y, hubOuter * 1.02, 6, t * 0.24);
-    ctx.strokeStyle = 'rgba(245,236,223,0.88)';
-    ctx.lineWidth = 1.1;
-    ctx.stroke();
-
-    const hubCoreGrad = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubCore * 2.8);
-    hubCoreGrad.addColorStop(0, 'rgba(255,255,255,1)');
-    hubCoreGrad.addColorStop(0.24, 'rgba(245,236,223,0.98)');
-    hubCoreGrad.addColorStop(0.52, 'rgba(217,174,120,0.94)');
-    hubCoreGrad.addColorStop(1, 'rgba(196,150,90,0.05)');
-    ctx.beginPath();
-    ctx.arc(hub.x,hub.y,hubCore * 2.8,0,Math.PI*2);
-    ctx.fillStyle = hubCoreGrad;
-    ctx.fill();
-
-    // Rotating orbit rings
-    const orbitRx = hubOuter * 2.4;
-    const orbitRy = hubOuter * 1.15;
-    const orbitSpin = t * 0.9;
-
-    ctx.save();
-    ctx.translate(hub.x, hub.y);
-
-    ctx.beginPath();
-    ctx.ellipse(0, 0, orbitRx, orbitRy, orbitSpin, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(245,236,223,0.52)';
-    ctx.lineWidth = 0.95;
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.ellipse(0, 0, orbitRx, orbitRy, orbitSpin + Math.PI / 2.2, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(80,188,168,0.42)';
-    ctx.lineWidth = 0.92;
-    ctx.stroke();
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-
-    ctx.restore();
+    if(pulses.length < (isLiteDevice ? 12 : 20) && Math.random() < (isLiteDevice ? 0.18 : 0.24)) spawnPulse();
 
     // Draw nodes
     for(let l=0;l<LAYERS.length;l++){
       for(let n=0;n<LAYERS[l];n++){
         const nd=nodes[l][n], act=nd.act;
-        let neighborInfluence = 0;
-        if(l > 0 && n < LAYERS[l-1]) neighborInfluence += Math.sin(t*0.6 + nodes[l-1][n].phase);
-        if(l < LAYERS.length-1 && n < LAYERS[l+1]) neighborInfluence += Math.sin(t*0.6 + nodes[l+1][n].phase);
-        if(n > 0) neighborInfluence += Math.sin(t*0.6 + nodes[l][n-1].phase) * 0.6;
-        if(n < LAYERS[l]-1) neighborInfluence += Math.sin(t*0.6 + nodes[l][n+1].phase) * 0.6;
-        neighborInfluence *= 0.8;
-        const sx = nd.x + Math.sin(t*0.7+nd.phase)*2.2 + neighborInfluence*1.8;
-        const sy = nd.y + Math.cos(t*0.58+nd.phase*1.2)*2.2 + neighborInfluence*1.5;
-        const r = 2 + act*2.4;
+        const sx = nd.x + Math.sin(t*0.55+nd.phase)*0.85;
+        const sy = nd.y + Math.cos(t*0.48+nd.phase*1.1)*0.85;
+        const r = l === 0 || l === LAYERS.length - 1 ? 4.2 + act*1.1 : 3.2 + act*1.0;
         const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*4);
-        glow.addColorStop(0, rgba(nd.col, 0.22*act));
-        glow.addColorStop(0.48, 'rgba(245,236,223,0.08)');
+        glow.addColorStop(0, rgba(nd.col, 0.34*act));
+        glow.addColorStop(0.42, 'rgba(245,236,223,0.08)');
         glow.addColorStop(1, rgba(nd.col, 0));
         ctx.beginPath(); ctx.arc(sx,sy,r*4,0,Math.PI*2);
         ctx.fillStyle=glow; ctx.fill();
 
         ctx.beginPath();
         ctx.arc(sx,sy,r+1.2,0,Math.PI*2);
-        ctx.strokeStyle = rgba(nd.col, 0.7);
-        ctx.lineWidth = 0.95;
+        ctx.strokeStyle = rgba(nd.col, 0.92);
+        ctx.lineWidth = 1.05;
         ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(sx,sy,r*0.72,0,Math.PI*2);
-        ctx.fillStyle = rgba({r:255,g:255,b:255}, 0.82*act);
+        ctx.fillStyle = l === LAYERS.length - 1
+          ? rgba({r:255,g:241,b:163}, 0.95*act)
+          : (l === 0 ? rgba({r:208,g:255,b:196}, 0.9*act) : rgba({r:255,g:255,b:255}, 0.86*act));
         ctx.fill();
       }
     }
 
     // Floating data particles
-    const particleCount = isLiteDevice ? 10 : 24;
+    const particleCount = isLiteDevice ? 8 : 18;
     for(let i=0;i<particleCount;i++){
       const angle=(i/particleCount)*Math.PI*2 + t*0.12 + Math.sin(t*0.3+i)*0.4;
-      const radius = W*0.32 + Math.sin(t*0.5+i*0.7)*W*0.08;
+      const radius = W*0.28 + Math.sin(t*0.5+i*0.7)*W*0.05;
       const px = W*0.5 + Math.cos(angle)*radius;
-      const py = H*0.5 + Math.sin(angle*0.8)*H*0.35;
+      const py = H*0.5 + Math.sin(angle*0.8)*H*0.28;
       const col = PALETTE[i % PALETTE.length];
-      const a = 0.035 + 0.055*Math.abs(Math.sin(t+i*0.6));
+      const a = 0.02 + 0.03*Math.abs(Math.sin(t+i*0.6));
       ctx.beginPath(); ctx.arc(px,py,1.5,0,Math.PI*2);
       ctx.fillStyle=rgba(col,a); ctx.fill();
     }
