@@ -53,7 +53,7 @@
 
   function networkCenter(){
     const isNarrow = W <= 700;
-    const centerX = isNarrow ? W * 0.22 : W * 0.61;
+    const centerX = isNarrow ? W * 0.16 : W * 0.61;
     const driftX = isNarrow ? 2.2 : 5;
     const driftY = isNarrow ? 2.4 : 4;
     const centerY = isNarrow ? H * 0.26 : H * 0.5;
