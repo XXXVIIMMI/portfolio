@@ -285,9 +285,9 @@
           grad.addColorStop(1, rgba(n2.col, alpha));
           ctx.save();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 1.44; ctx.globalAlpha = 0.66; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = isSmartphone ? 1.88 : 1.44; ctx.globalAlpha = 0.66; ctx.stroke();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 1.1; ctx.globalAlpha = 1; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = isSmartphone ? 1.48 : 1.1; ctx.globalAlpha = 1; ctx.stroke();
           ctx.restore();
         }
       }
@@ -302,9 +302,9 @@
       const col = lerpColor(p.colA, p.colB, p.prog);
 
       pushTrail(p.history, px, py, TRAIL_LEN);
-      drawTrail(p.history, col, 2.55, 0.28, 0.74);
+      drawTrail(p.history, col, isSmartphone ? 3.3 : 2.55, 0.32, 0.78);
 
-      const pulseR = 6.2;
+      const pulseR = isSmartphone ? 7.8 : 6.2;
       const g = ctx.createRadialGradient(px,py,0,px,py,pulseR);
       g.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
       g.addColorStop(0.18, rgba(col, 1));
@@ -329,7 +329,7 @@
         const nd=nodes[l][n], act=nd.act;
         const sx = nd.x + Math.sin(t*0.55+nd.phase)*0.85;
         const sy = nd.y + Math.cos(t*0.48+nd.phase*1.1)*0.85;
-        const r = l === 0 || l === LAYERS.length - 1 ? 4.2 + act*1.1 : 3.2 + act*1.0;
+        const r = l === 0 || l === LAYERS.length - 1 ? (isSmartphone ? 5.2 : 4.2) + act*1.1 : (isSmartphone ? 4.2 : 3.2) + act*1.0;
         if(showGlow){
           const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.2);
           glow.addColorStop(0, rgba({r:255,g:255,b:255}, 0.18));
@@ -343,7 +343,7 @@
         ctx.beginPath();
         ctx.arc(sx,sy,r+0.8,0,Math.PI*2);
         ctx.strokeStyle = rgba(nd.col, 1);
-        ctx.lineWidth = 1.28;
+        ctx.lineWidth = isSmartphone ? 1.72 : 1.28;
         ctx.stroke();
 
         ctx.beginPath();
