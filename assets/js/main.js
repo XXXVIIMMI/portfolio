@@ -5,6 +5,7 @@
   const canvas = document.getElementById('nn-canvas');
   const ctx = canvas.getContext('2d');
   let W, H, t = 0, animId;
+  const isLiteDevice = window.matchMedia('(max-width: 700px), (hover: none) and (pointer: coarse), (prefers-reduced-motion: reduce)').matches;
 
   // Multi-color palette for nodes/edges
   const PALETTE = [
@@ -31,7 +32,7 @@
   }
 
   // Network layers
-  const LAYERS = [3, 6, 9, 11, 9, 6, 3];
+  const LAYERS = isLiteDevice ? [2, 4, 6, 7, 6, 4, 2] : [3, 6, 9, 11, 9, 6, 3];
   let nodes = [];
   let pulses = [];
 
@@ -195,8 +196,8 @@
       }
       return true;
     });
-    if(pulses.length < 18 && Math.random()<0.22) spawnPulse();
-    if(pulses.length < 26 && Math.random()<0.18) spawnHubPulse();
+    if(pulses.length < (isLiteDevice ? 10 : 18) && Math.random() < (isLiteDevice ? 0.14 : 0.22)) spawnPulse();
+    if(pulses.length < (isLiteDevice ? 14 : 26) && Math.random() < (isLiteDevice ? 0.1 : 0.18)) spawnHubPulse();
 
     // Hub geometry
     const hubOuter = 14 + Math.sin(t * 3.2) * 2.4;
@@ -280,8 +281,9 @@
     }
 
     // Floating data particles
-    for(let i=0;i<24;i++){
-      const angle=(i/24)*Math.PI*2 + t*0.12 + Math.sin(t*0.3+i)*0.4;
+    const particleCount = isLiteDevice ? 10 : 24;
+    for(let i=0;i<particleCount;i++){
+      const angle=(i/particleCount)*Math.PI*2 + t*0.12 + Math.sin(t*0.3+i)*0.4;
       const radius = W*0.32 + Math.sin(t*0.5+i*0.7)*W*0.08;
       const px = W*0.5 + Math.cos(angle)*radius;
       const py = H*0.5 + Math.sin(angle*0.8)*H*0.35;
@@ -300,10 +302,15 @@
 })();
 
 // ── SCROLL REVEAL ──
-const io = new IntersectionObserver(es=>{
-  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
-},{threshold:0.1});
-document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+const revealEls = document.querySelectorAll('.sr');
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }});
+  },{threshold:0.1});
+  revealEls.forEach(el=>io.observe(el));
+} else {
+  revealEls.forEach(el=>el.classList.add('in'));
+}
 
 // ── MOBILE NAV TOGGLE ──
 const nav = document.getElementById('nav');
@@ -320,6 +327,13 @@ if(nav && navToggle && navLinksPanel){
       nav.classList.remove('menu-open');
       navToggle.setAttribute('aria-expanded', 'false');
     });
+  });
+
+  window.addEventListener('resize', ()=>{
+    if(window.innerWidth > 920 && nav.classList.contains('menu-open')){
+      nav.classList.remove('menu-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
   });
 }
 
