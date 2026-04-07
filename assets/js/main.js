@@ -200,6 +200,7 @@
     t += 0.007;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+    const showGlow = !isLiteDevice;
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
       bgGlow.addColorStop(0, 'rgba(123,198,255,0.2)');
@@ -275,13 +276,15 @@
         const sx = nd.x + Math.sin(t*0.55+nd.phase)*0.85;
         const sy = nd.y + Math.cos(t*0.48+nd.phase*1.1)*0.85;
         const r = l === 0 || l === LAYERS.length - 1 ? 4.2 + act*1.1 : 3.2 + act*1.0;
-        const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.2);
-        glow.addColorStop(0, rgba({r:255,g:255,b:255}, 0.18));
-        glow.addColorStop(0.22, rgba(nd.col, 0.22*act));
-        glow.addColorStop(0.7, rgba(nd.col, 0.04*act));
-        glow.addColorStop(1, rgba(nd.col, 0));
-        ctx.beginPath(); ctx.arc(sx,sy,r*2.2,0,Math.PI*2);
-        ctx.fillStyle=glow; ctx.fill();
+        if(showGlow){
+          const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.2);
+          glow.addColorStop(0, rgba({r:255,g:255,b:255}, 0.18));
+          glow.addColorStop(0.22, rgba(nd.col, 0.22*act));
+          glow.addColorStop(0.7, rgba(nd.col, 0.04*act));
+          glow.addColorStop(1, rgba(nd.col, 0));
+          ctx.beginPath(); ctx.arc(sx,sy,r*2.2,0,Math.PI*2);
+          ctx.fillStyle=glow; ctx.fill();
+        }
 
         ctx.beginPath();
         ctx.arc(sx,sy,r+0.8,0,Math.PI*2);
@@ -330,15 +333,17 @@
 
     // Core nucleus with bright inner center and warm shell
     const coreR = (isLiteDevice ? 5.4 : 7.1) * hubScale;
-    const coreGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, coreR * 2.8);
-    coreGlow.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
-    coreGlow.addColorStop(0.18, rgba({r:255,g:252,b:236}, 0.92));
-    coreGlow.addColorStop(0.42, rgba(hubCore, 0.62));
-    coreGlow.addColorStop(1, rgba(hubCore, 0));
-    ctx.beginPath();
-    ctx.arc(hubX, hubY, coreR * 2.8, 0, Math.PI * 2);
-    ctx.fillStyle = coreGlow;
-    ctx.fill();
+    if(showGlow){
+      const coreGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, coreR * 2.8);
+      coreGlow.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
+      coreGlow.addColorStop(0.18, rgba({r:255,g:252,b:236}, 0.92));
+      coreGlow.addColorStop(0.42, rgba(hubCore, 0.62));
+      coreGlow.addColorStop(1, rgba(hubCore, 0));
+      ctx.beginPath();
+      ctx.arc(hubX, hubY, coreR * 2.8, 0, Math.PI * 2);
+      ctx.fillStyle = coreGlow;
+      ctx.fill();
+    }
 
     ctx.beginPath();
     ctx.arc(hubX, hubY, coreR * 1.06, 0, Math.PI * 2);
@@ -374,16 +379,22 @@
       const o = orbits[i];
 
       // Soft glow pass for each elliptical orbit
+      if(showGlow){
+        ctx.save();
+        ctx.translate(hubX, hubY);
+        ctx.rotate(o.rot);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = o.glow;
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Sharp visible orbit stroke
       ctx.save();
       ctx.translate(hubX, hubY);
       ctx.rotate(o.rot);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
-      ctx.strokeStyle = o.glow;
-      ctx.lineWidth = 1.4;
-      ctx.stroke();
-
-      // Sharp visible orbit stroke
       ctx.beginPath();
       ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
       ctx.strokeStyle = rgba(o.col, 1);
