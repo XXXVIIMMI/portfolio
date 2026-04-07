@@ -127,7 +127,7 @@
         history:[]
       };
       hubParticles.push({...base, progress:(i / outputCount) * 0.55});
-      hubParticles.push({...base, progress:((i / outputCount) * 0.55 + 0.42) % 1, phase:base.phase + 1.2, speed:base.speed * 0.92, col:layerPalette(LAYERS.length - 1)[(i + 1) % 3], history:[]});
+      hubParticles.push({...base, sourceIndex:(i + 1) % outputCount, progress:((i / outputCount) * 0.55 + 0.42) % 1, phase:base.phase + 1.2, speed:base.speed * 0.92, col:layerPalette(LAYERS.length - 1)[(i + 1) % 3], history:[]});
     }
   }
 
