@@ -79,11 +79,11 @@
         : isSmallLaptop
           ? [0.38, 0.52, 0.66, 0.8, 0.93]
           : [0.44, 0.57, 0.7, 0.83, 0.96];
-    const sizeX = isPhone ? 0.62 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
-    const sizeY = isPhone ? 0.42 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
+    const sizeX = isPhone ? 0.75 : isTablet ? 0.64 : isSmallLaptop ? 0.66 : 0.68;
+    const sizeY = isPhone ? 0.58 : isTablet ? 0.46 : isSmallLaptop ? 0.49 : 0.52;
     const leftAnchor = W * layerPositions[0];
-    const topPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
-    const bottomPad = isPhone ? H * 0.08 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const topPad = isPhone ? H * 0.05 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
+    const bottomPad = isPhone ? H * 0.05 : isTablet ? H * 0.085 : isSmallLaptop ? H * 0.09 : H * 0.08;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
@@ -205,7 +205,7 @@
     if(isSmartphone){
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
-      ctx.scale(1.15, 1.15);
+      ctx.scale(1.45, 1.45);
       ctx.translate(-W * 0.5, -H * 0.5);
     }
 

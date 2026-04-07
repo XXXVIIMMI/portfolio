@@ -582,8 +582,8 @@ footer{
   .hero-visual{
     order:2;
     position:relative;
-    height:clamp(240px,42vw,320px);
-    margin:1.2rem 0 1rem;
+    height:clamp(340px, 62vw, 420px);
+    margin:1.4rem 0 1.2rem;
   }
   #nn-canvas{
     filter:saturate(1.24) contrast(1.1) brightness(0.98);
@@ -622,7 +622,7 @@ footer{
 
 @media(max-width:700px) and (orientation:landscape){
   .hero{padding:4.2rem 1.25rem 2.4rem}
-  .hero-visual{height:clamp(180px,30vw,240px)}
+  .hero-visual{height:clamp(220px,38vw,300px)}
   .hero-inner{max-width:58%}
   .hero-btns{gap:0.75rem}
   .btn-fill,.btn-stroke{width:auto;min-width:132px}
@@ -653,7 +653,10 @@ footer{
   .hero{min-height:auto;padding:4.9rem 1rem 2.2rem}
   .hero-inner{max-width:100%}
   .hero-content h1{margin-top:0}
-  .hero-visual{height:clamp(280px,52vw,380px)}
+  .hero-visual{
+     height:clamp(420px, 85vw, 580px);
+     margin:1.8rem 0 1.4rem;
+  }
   #nn-canvas{height:100%}
   .hero-overlay{height:100%}
   section{padding:4rem 1rem}
