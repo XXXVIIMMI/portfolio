@@ -96,7 +96,18 @@
         const rawX = x + Math.sin((l + n) * 1.3 + t * 0.2) * jitterX;
         const rawY = baseY + Math.cos((l * 0.8 + n) * 1.1 + t * 0.24) * jitterY;
         const col = palette[(n + l) % palette.length];
-        nodes[l].push({x: rawX, y: rawY, col, phase: l*1.3+n*0.75, act:0, layer:l, index:n});
+          nodes[l].push({
+            x: rawX,
+            y: rawY,
+            col,
+            phase: l*1.3+n*0.75,
+            act:0,
+            layer:l,
+            index:n,
+            depthSeed: l*0.9 + n*0.35,
+            twistSeed: l*0.65 + n*0.22,
+            warpSeed: l*0.4 + n*0.31
+          });
       }
     }
 
@@ -291,6 +302,11 @@
     const hubBlue = { r: 108, g: 182, b: 255 };
     const hubBlueSoft = { r: 86, g: 152, b: 230 };
     const outLayer = nodes[LAYERS.length - 1];
+    const hubDepth = Math.sin(t * 0.42) * 0.6 + Math.cos(t * 0.18) * 0.4;
+    const hubTwist = Math.sin(t * 0.7) * 0.35;
+    const hubScale = 1 + hubDepth * 0.05;
+    const hubShiftX = Math.sin(t * 0.36) * 2.2;
+    const hubShiftY = Math.cos(t * 0.33) * 1.5;
 
     for(let i=0;i<outLayer.length;i++){
       const n = outLayer[i];
@@ -307,7 +323,7 @@
     }
 
     // Core nucleus with bright inner center and warm shell
-    const coreR = isLiteDevice ? 5.4 : 7.1;
+    const coreR = (isLiteDevice ? 5.4 : 7.1) * hubScale;
     const coreGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, coreR * 2.8);
     coreGlow.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
     coreGlow.addColorStop(0.18, rgba({r:255,g:252,b:236}, 0.92));
@@ -325,9 +341,9 @@
 
     const orbits = [
       {
-        rx:(isLiteDevice ? 17.2 : 23) + hubPulse * 1.95 + Math.sin(t * 1.9) * 0.6,
-        ry:(isLiteDevice ? 10 : 13.7) + hubPulse * 1.45 + Math.cos(t * 1.6) * 0.45,
-        rot:t * 0.62 + 0.2,
+        rx:(isLiteDevice ? 17.2 : 23) + hubPulse * 1.95 + Math.sin(t * 1.9) * 0.6 + hubDepth * 0.8,
+        ry:(isLiteDevice ? 10 : 13.7) + hubPulse * 1.45 + Math.cos(t * 1.6) * 0.45 + hubDepth * 0.45,
+        rot:t * 0.62 + 0.2 + hubTwist,
         col:hubShell,
         glow:rgba(hubShell, 0.3),
         speed:5.4,
@@ -336,9 +352,9 @@
         dotR:2.05
       },
       {
-        rx:(isLiteDevice ? 18.6 : 25.8) + hubPulse * 2.2 + Math.cos(t * 1.7) * 0.68,
-        ry:(isLiteDevice ? 9.1 : 12.4) + hubPulse * 1.4 + Math.sin(t * 1.45) * 0.42,
-        rot:-0.98 + t * 0.5,
+        rx:(isLiteDevice ? 18.6 : 25.8) + hubPulse * 2.2 + Math.cos(t * 1.7) * 0.68 - hubDepth * 0.55,
+        ry:(isLiteDevice ? 9.1 : 12.4) + hubPulse * 1.4 + Math.sin(t * 1.45) * 0.42 + hubDepth * 0.35,
+        rot:-0.98 + t * 0.5 - hubTwist,
         col:hubBlue,
         glow:rgba(hubBlue, 0.25),
         speed:-4.9,
@@ -371,10 +387,11 @@
 
       // Orbital particle with history tail
       const a = t * o.speed + o.phase;
-      const lx = Math.cos(a) * o.rx;
-      const ly = Math.sin(a) * o.ry;
-      const dx = hubX + lx * Math.cos(o.rot) - ly * Math.sin(o.rot);
-      const dy = hubY + lx * Math.sin(o.rot) + ly * Math.cos(o.rot);
+      const localWarp = Math.sin(t * 0.44 + o.phase) * 0.28 + Math.cos(t * 0.27 + o.phase) * 0.16;
+      const lx = Math.cos(a + localWarp) * (o.rx * (1 + hubDepth * 0.02));
+      const ly = Math.sin(a - localWarp) * (o.ry * (1 + hubDepth * 0.02));
+      const dx = hubX + hubShiftX + lx * Math.cos(o.rot) - ly * Math.sin(o.rot);
+      const dy = hubY + hubShiftY + lx * Math.sin(o.rot) + ly * Math.cos(o.rot);
 
       pushTrail(o.trail, dx, dy, TRAIL_LEN + 6);
       drawTrail(o.trail, o.col, 1.7, 0.38, 0.34);
@@ -429,8 +446,8 @@
       const p = orbitParticles[i];
       const angle = p.angleSeed + t * p.speed + Math.sin(t * 0.3 + p.phase) * p.wobble;
       const radius = W * p.radiusBase + Math.sin(t * 0.5 + p.phase) * W * p.radiusAmp;
-      const px = W * 0.5 + Math.cos(angle) * radius;
-      const py = H * 0.5 + Math.sin(angle * p.yStretch) * H * 0.28;
+      const px = W * 0.5 + Math.cos(angle) * radius + Math.sin(t * 0.41 + p.phase) * 3.5;
+      const py = H * 0.5 + Math.sin(angle * p.yStretch) * H * 0.28 + Math.cos(t * 0.29 + p.phase) * 2.1;
       const headAlpha = 0.07 + 0.07 * Math.abs(Math.sin(t + p.phase));
 
       pushTrail(p.history, px, py, TRAIL_LEN);
