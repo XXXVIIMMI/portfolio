@@ -37,16 +37,24 @@
   let pulses = [];
 
   function hubPoint(){
+    const isNarrow = W <= 700;
+    const edgePad = isNarrow ? 96 : Math.max(46, W * 0.07);
+    const driftX = isNarrow ? 1.2 : 3;
+    const driftY = isNarrow ? 2.2 : 4;
     return {
-      x: W - Math.max(46, W * 0.07) + Math.sin(t * 0.5) * 3,
-      y: H * 0.5 + Math.cos(t * 0.42) * 4
+      x: W - edgePad + Math.sin(t * 0.5) * driftX,
+      y: H * 0.5 + Math.cos(t * 0.42) * driftY
     };
   }
 
   function networkCenter(){
+    const isNarrow = W <= 700;
+    const centerX = isNarrow ? W * 0.46 : W * 0.61;
+    const driftX = isNarrow ? 2.2 : 5;
+    const driftY = isNarrow ? 2.4 : 4;
     return {
-      x: W * 0.61 + Math.sin(t * 0.25) * 5,
-      y: H * 0.5 + Math.cos(t * 0.21) * 4
+      x: centerX + Math.sin(t * 0.25) * driftX,
+      y: H * 0.5 + Math.cos(t * 0.21) * driftY
     };
   }
 
@@ -59,7 +67,9 @@
   function buildNodes(){
     nodes = [];
     const center = networkCenter();
-    const maxRadius = Math.min(W, H) * 0.23;
+    const isNarrow = W <= 700;
+    const maxRadius = Math.min(W, H) * (isNarrow ? 0.18 : 0.23);
+    const nodePad = isNarrow ? 20 : 12;
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
       const count = LAYERS[l];
@@ -67,8 +77,10 @@
       const radius = maxRadius * (1 - ringT * 0.78) + 12;
       for(let n=0;n<count;n++){
         const angle = (Math.PI * 2 * n) / count + l * 0.22;
-        const x = center.x + Math.cos(angle) * radius;
-        const y = center.y + Math.sin(angle) * radius;
+        const rawX = center.x + Math.cos(angle) * radius;
+        const rawY = center.y + Math.sin(angle) * radius;
+        const x = Math.min(W - nodePad, Math.max(nodePad, rawX));
+        const y = Math.min(H - nodePad, Math.max(nodePad, rawY));
         const col = PALETTE[(l*3+n*2) % PALETTE.length];
         nodes[l].push({x, y, col, phase: l*1.7+n*0.9, act:0, angle, radius});
       }
@@ -200,13 +212,14 @@
     if(pulses.length < (isLiteDevice ? 14 : 26) && Math.random() < (isLiteDevice ? 0.1 : 0.18)) spawnHubPulse();
 
     // Hub geometry
-    const hubOuter = 14 + Math.sin(t * 3.2) * 2.4;
-    const hubCore = 5.3 + Math.sin(t * 4.3) * 1.1;
-    const halo = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubOuter * 5.8);
+    const hubScale = W <= 700 ? 0.78 : 1;
+    const hubOuter = (14 + Math.sin(t * 3.2) * 2.4) * hubScale;
+    const hubCore = (5.3 + Math.sin(t * 4.3) * 1.1) * hubScale;
+    const halo = ctx.createRadialGradient(hub.x,hub.y,0,hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8));
     halo.addColorStop(0, 'rgba(196,150,90,0.42)');
     halo.addColorStop(1, 'rgba(196,150,90,0)');
     ctx.beginPath();
-    ctx.arc(hub.x,hub.y,hubOuter * 5.8,0,Math.PI*2);
+    ctx.arc(hub.x,hub.y,hubOuter * (W <= 700 ? 4.6 : 5.8),0,Math.PI*2);
     ctx.fillStyle = halo;
     ctx.fill();
 
