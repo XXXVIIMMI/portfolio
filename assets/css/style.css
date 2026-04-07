@@ -135,7 +135,8 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 h1{
   font-family:'Playfair Display',serif;
   font-size:clamp(3.2rem,5.8vw,5.8rem);font-weight:400;
-  line-height:1.02;letter-spacing:-0.02em;margin-bottom:1.8rem;
+  line-height:1.02;letter-spacing:-0.02em;margin:0 0 1.8rem 0;
+  text-align:left;
   opacity:0;animation:up 1s 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 h1 i{font-style:italic;color:var(--gold)}
@@ -524,8 +525,8 @@ footer{
     min-height:auto;
     padding:5.6rem 1.5rem 3.1rem;
   }
-  .hero-content{margin-top:4.6rem}
-  .hero-content h1{margin-top:4.4rem}
+  .hero-content{margin-top:0}
+  .hero-content h1{margin-top:0}
   .hero-btns{flex-wrap:wrap}
   h1{font-size:clamp(2.25rem,11.4vw,3.2rem);line-height:1.05;margin-bottom:1.2rem}
   .hero-content{max-width:100%}
@@ -571,8 +572,8 @@ footer{
   html{font-size:15px}
   nav{padding:0 1rem}
   .hero{min-height:auto;padding:5.1rem 1rem 2.3rem}
-  .hero-content{margin-top:5.8rem}
-  .hero-content h1{margin-top:5.8rem}
+  .hero-content{margin-top:0}
+  .hero-content h1{margin-top:0}
   section{padding:4rem 1rem}
   .about-section{padding-top:2.1rem}
   .about-section .sec-head{margin-bottom:2rem}
