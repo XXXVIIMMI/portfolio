@@ -14,14 +14,12 @@
   function renderTilt(){
     tilt.x += (tilt.tx - tilt.x) * 0.16;
     tilt.y += (tilt.ty - tilt.y) * 0.16;
-    content.style.setProperty('--hero-ry', `${tilt.x * 8}deg`);
-    content.style.setProperty('--hero-rx', `${tilt.y * -8}deg`);
+    const floatY = Math.sin(performance.now() * 0.0014) * -8;
+    content.style.setProperty('--hero-fy', `${floatY}px`);
+    content.style.setProperty('--hero-ry', `${tilt.x * 12}deg`);
+    content.style.setProperty('--hero-rx', `${tilt.y * -12}deg`);
 
-    if(Math.abs(tilt.tx - tilt.x) > 0.001 || Math.abs(tilt.ty - tilt.y) > 0.001){
-      tilt.raf = requestAnimationFrame(renderTilt);
-      return;
-    }
-    tilt.raf = 0;
+    tilt.raf = requestAnimationFrame(renderTilt);
   }
 
   function queueTilt(){
@@ -42,6 +40,8 @@
     tilt.ty = 0;
     queueTilt();
   });
+
+  queueTilt();
 })();
 
 // ── NEURAL NETWORK LIVE WALLPAPER ──────────────────────────────

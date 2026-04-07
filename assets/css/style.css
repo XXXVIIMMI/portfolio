@@ -109,6 +109,18 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
   background:var(--ink);
 }
 
+.hero::after{
+  content:'';
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:260px;
+  pointer-events:none;
+  z-index:1;
+  background:linear-gradient(to bottom,rgba(9,9,11,0) 0%,rgba(9,9,11,0.58) 60%,var(--ink) 100%);
+}
+
 .hero-content{
   position:relative;z-index:2;width:100%;max-width:none;
   min-height:100svh;
@@ -121,7 +133,7 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 .hero-inner{
   position:relative;z-index:2;max-width:620px;width:100%;
   transform-style:preserve-3d;will-change:transform;
-  transform:rotateX(var(--hero-rx,0deg)) rotateY(var(--hero-ry,0deg));
+  transform:translateY(var(--hero-fy,0px)) rotateX(var(--hero-rx,0deg)) rotateY(var(--hero-ry,0deg));
   transition:transform 0.22s cubic-bezier(0.22,1,0.36,1);
 }
 
@@ -133,7 +145,7 @@ nav.menu-open .nav-toggle span:nth-child(3){transform:translateY(-6px) rotate(-4
 
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,rgba(9,9,11,0.56) 0%,rgba(9,9,11,0.46) 50%,rgba(9,9,11,0.58) 100%);
+  background:rgba(9,9,11,0.54);
 }
 
 .h-label{
@@ -195,6 +207,7 @@ h2 i{font-style:italic;color:var(--gold)}
 }
 .sec-head{margin-bottom:4.5rem}
 hr.rule{border:none;border-top:1px solid var(--rule);margin:0 4rem}
+.hero + hr.rule{border-top-color:transparent;margin:0}
 
 /* ── ABOUT ── */
 .about-section{background:var(--ink2)}
