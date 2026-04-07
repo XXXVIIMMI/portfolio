@@ -68,15 +68,17 @@
     const layerPositions = isNarrow
       ? [0.06, 0.27, 0.5, 0.73, 0.94]
       : [0.08, 0.28, 0.5, 0.72, 0.92];
-    const sizeX = isNarrow ? 0.84 : 0.9;
-    const sizeY = isNarrow ? 0.76 : 0.84;
+    const sizeX = isNarrow ? 0.82 : 0.88;
+    const sizeY = isNarrow ? 0.74 : 0.82;
+    const leftAnchor = W * layerPositions[0];
     const topPad = isNarrow ? H * 0.08 : H * 0.08;
     const bottomPad = isNarrow ? H * 0.08 : H * 0.08;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
       const count = LAYERS[l];
-      const x = W * (0.5 + (layerPositions[l] - 0.5) * sizeX);
+      const originalX = W * layerPositions[l];
+      const x = leftAnchor + (originalX - leftAnchor) * sizeX;
       const palette = layerPalette(l);
       const jitterX = isNarrow ? 0.35 : 0.5;
       const jitterY = isNarrow ? 0.9 : 1.1;
