@@ -41,9 +41,9 @@
     const edgePad = isNarrow ? 96 : Math.max(46, W * 0.07);
     const driftX = isNarrow ? 1.2 : 3;
     const driftY = isNarrow ? 2.2 : 4;
-    const baseY = isNarrow ? H * 0.22 : H * 0.5;
-    const safeTopY = isNarrow ? 58 : 0;
-    const safeBottomY = isNarrow ? H - 58 : H;
+    const baseY = isNarrow ? H * 0.24 : H * 0.5;
+    const safeTopY = isNarrow ? 92 : 0;
+    const safeBottomY = isNarrow ? Math.max(160, H * 0.36) : H;
     const hubY = baseY + Math.cos(t * 0.42) * driftY;
     return {
       x: W - edgePad + Math.sin(t * 0.5) * driftX,
@@ -75,6 +75,8 @@
     const isNarrow = W <= 700;
     const maxRadius = Math.min(W, H) * (isNarrow ? 0.15 : 0.23);
     const nodePad = isNarrow ? 20 : 12;
+    const nodeTopPad = isNarrow ? 86 : nodePad;
+    const nodeBottomPad = isNarrow ? Math.max(156, H * 0.4) : H - nodePad;
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
       const count = LAYERS[l];
@@ -85,7 +87,7 @@
         const rawX = center.x + Math.cos(angle) * radius;
         const rawY = center.y + Math.sin(angle) * radius;
         const x = Math.min(W - nodePad, Math.max(nodePad, rawX));
-        const y = Math.min(H - nodePad, Math.max(nodePad, rawY));
+        const y = Math.min(nodeBottomPad, Math.max(nodeTopPad, rawY));
         const col = PALETTE[(l*3+n*2) % PALETTE.length];
         nodes[l].push({x, y, col, phase: l*1.7+n*0.9, act:0, angle, radius});
       }
