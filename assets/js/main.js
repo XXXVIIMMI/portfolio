@@ -201,7 +201,7 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     const showGlow = !isLiteDevice;
-    const isMobile = isPhone;
+    const isMobile = W <= 700;
     if(isMobile){
       ctx.save();
       ctx.translate(W * 0.5, H * 0.5);
