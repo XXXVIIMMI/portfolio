@@ -556,13 +556,31 @@ footer{
 @media(max-width:700px){
   .hero{
     min-height:auto;
-    padding:5.4rem 1.25rem 3rem;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:4.8rem 1.25rem 3rem;
   }
-  .hero-content{margin-top:0}
+  #nn-canvas{
+    position:relative;
+    order:1;
+    width:100%;
+    height:clamp(240px,42vw,320px);
+    flex:0 0 auto;
+    filter:saturate(1.24) contrast(1.1) brightness(0.98);
+  }
+  .hero-overlay{
+    height:clamp(240px,42vw,320px);
+  }
+  .hero-content{
+    order:2;
+    position:relative;
+    margin-top:1.4rem;
+    max-width:100%;
+  }
   .hero-content h1{margin-top:0}
   .hero-btns{flex-wrap:wrap}
   h1{font-size:clamp(2.15rem,10.8vw,3.1rem);line-height:1.05;margin-bottom:1rem}
-  .hero-content{max-width:100%}
   .hero-role{font-size:0.66rem;letter-spacing:0.14em}
   .hero-bio{font-size:0.94rem;line-height:1.72}
   .btn-fill,.btn-stroke{width:100%;text-align:center}
@@ -591,8 +609,10 @@ footer{
 }
 
 @media(max-width:700px) and (orientation:landscape){
-  .hero{padding:4.8rem 1.25rem 2.6rem}
-  .hero-content{max-width:58%}
+  .hero{padding:4.2rem 1.25rem 2.4rem}
+  #nn-canvas{height:clamp(180px,30vw,240px)}
+  .hero-overlay{height:clamp(180px,30vw,240px)}
+  .hero-content{max-width:58%; margin-top:1rem}
   .hero-btns{gap:0.75rem}
   .btn-fill,.btn-stroke{width:auto;min-width:132px}
 }
