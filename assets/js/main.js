@@ -327,8 +327,8 @@
 
     const orbits = [
       {
-        rx:(isLiteDevice ? 12.8 : 16.6) + hubPulse * 1.45 + Math.sin(t * 1.9) * 0.5,
-        ry:(isLiteDevice ? 7.4 : 9.8) + hubPulse * 1.05 + Math.cos(t * 1.6) * 0.36,
+        rx:(isLiteDevice ? 17.2 : 23) + hubPulse * 1.95 + Math.sin(t * 1.9) * 0.6,
+        ry:(isLiteDevice ? 10 : 13.7) + hubPulse * 1.45 + Math.cos(t * 1.6) * 0.45,
         rot:t * 0.62 + 0.2,
         col:hubShell,
         glow:rgba(hubShell, 0.3),
@@ -338,8 +338,8 @@
         dotR:2.05
       },
       {
-        rx:(isLiteDevice ? 13.7 : 18.2) + hubPulse * 1.65 + Math.cos(t * 1.7) * 0.56,
-        ry:(isLiteDevice ? 6.6 : 8.8) + hubPulse * 1.02 + Math.sin(t * 1.45) * 0.32,
+        rx:(isLiteDevice ? 18.6 : 25.8) + hubPulse * 2.2 + Math.cos(t * 1.7) * 0.68,
+        ry:(isLiteDevice ? 9.1 : 12.4) + hubPulse * 1.4 + Math.sin(t * 1.45) * 0.42,
         rot:-0.98 + t * 0.5,
         col:hubBlue,
         glow:rgba(hubBlue, 0.25),
