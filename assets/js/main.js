@@ -170,9 +170,9 @@
     ctx.lineJoin = 'round';
 
     const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
-    bgGlow.addColorStop(0, 'rgba(123,198,255,0.08)');
-    bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.11)');
-    bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.05)');
+      bgGlow.addColorStop(0, 'rgba(123,198,255,0.2)');
+      bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.24)');
+      bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.12)');
     bgGlow.addColorStop(1, 'rgba(9,9,11,0)');
     ctx.fillStyle = bgGlow;
     ctx.fillRect(0, 0, W, H);
@@ -189,18 +189,18 @@
       for(let a=0;a<LAYERS[l];a++){
         for(let b=0;b<LAYERS[l+1];b++){
           const n1=nodes[l][a], n2=nodes[l+1][b];
-          const alpha = 0.11 + 0.1*n1.act*n2.act;
+              const alpha = 0.22 + 0.16*n1.act*n2.act;
           const mid = lerpColor(n1.col, n2.col, 0.5);
           const grad = ctx.createLinearGradient(n1.x,n1.y,n2.x,n2.y);
           grad.addColorStop(0, rgba(n1.col, alpha));
           grad.addColorStop(0.4, rgba(mid, alpha*1.12));
-          grad.addColorStop(0.68, 'rgba(245,236,223,0.18)');
+          grad.addColorStop(0.68, 'rgba(255,252,242,0.48)');
           grad.addColorStop(1, rgba(n2.col, alpha));
           ctx.save();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 1.28; ctx.globalAlpha = 0.42; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 1.44; ctx.globalAlpha = 0.66; ctx.stroke();
           ctx.beginPath(); ctx.moveTo(n1.x,n1.y); ctx.lineTo(n2.x,n2.y);
-          ctx.strokeStyle = grad; ctx.lineWidth = 0.95; ctx.globalAlpha = 1; ctx.stroke();
+          ctx.strokeStyle = grad; ctx.lineWidth = 1.1; ctx.globalAlpha = 1; ctx.stroke();
           ctx.restore();
         }
       }
@@ -215,12 +215,13 @@
       const col = lerpColor(p.colA, p.colB, p.prog);
 
       pushTrail(p.history, px, py, TRAIL_LEN);
-      drawTrail(p.history, col, 1.85, 0.4, 0.38);
+      drawTrail(p.history, col, 2.55, 0.28, 0.74);
 
-      const pulseR = 5.8;
+      const pulseR = 6.2;
       const g = ctx.createRadialGradient(px,py,0,px,py,pulseR);
-      g.addColorStop(0, rgba(col, 1));
-      g.addColorStop(0.35, rgba(col, 0.3));
+      g.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
+      g.addColorStop(0.18, rgba(col, 1));
+      g.addColorStop(0.35, rgba(col, 0.5));
       g.addColorStop(1, rgba(col, 0));
       ctx.beginPath(); ctx.arc(px,py,pulseR,0,Math.PI*2);
       ctx.fillStyle=g; ctx.fill();
@@ -242,24 +243,25 @@
         const sx = nd.x + Math.sin(t*0.55+nd.phase)*0.85;
         const sy = nd.y + Math.cos(t*0.48+nd.phase*1.1)*0.85;
         const r = l === 0 || l === LAYERS.length - 1 ? 4.2 + act*1.1 : 3.2 + act*1.0;
-        const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.4);
-        glow.addColorStop(0, rgba(nd.col, 0.3*act));
-        glow.addColorStop(0.42, 'rgba(245,236,223,0.06)');
+        const glow=ctx.createRadialGradient(sx,sy,0,sx,sy,r*2.2);
+        glow.addColorStop(0, rgba({r:255,g:255,b:255}, 0.18));
+        glow.addColorStop(0.22, rgba(nd.col, 0.22*act));
+        glow.addColorStop(0.7, rgba(nd.col, 0.04*act));
         glow.addColorStop(1, rgba(nd.col, 0));
-        ctx.beginPath(); ctx.arc(sx,sy,r*2.4,0,Math.PI*2);
+        ctx.beginPath(); ctx.arc(sx,sy,r*2.2,0,Math.PI*2);
         ctx.fillStyle=glow; ctx.fill();
 
         ctx.beginPath();
-        ctx.arc(sx,sy,r+1,0,Math.PI*2);
+        ctx.arc(sx,sy,r+0.8,0,Math.PI*2);
         ctx.strokeStyle = rgba(nd.col, 1);
-        ctx.lineWidth = 1.34;
+        ctx.lineWidth = 1.28;
         ctx.stroke();
 
         ctx.beginPath();
-        ctx.arc(sx,sy,r*0.82,0,Math.PI*2);
+        ctx.arc(sx,sy,r*0.9,0,Math.PI*2);
         ctx.fillStyle = l === LAYERS.length - 1
-          ? rgba({r:255,g:250,b:196}, 1)
-          : (l === 0 ? rgba({r:228,g:255,b:216}, 0.98) : rgba({r:255,g:255,b:255}, 0.98));
+          ? rgba({r:255,g:255,b:248}, 1)
+          : (l === 0 ? rgba({r:248,g:255,b:245}, 1) : rgba({r:255,g:255,b:255}, 1));
         ctx.fill();
       }
     }
@@ -278,42 +280,23 @@
     for(let i=0;i<outLayer.length;i++){
       const n = outLayer[i];
       const grad = ctx.createLinearGradient(n.x, n.y, hubX, hubY);
-      grad.addColorStop(0, rgba(n.col, 0.34 + n.act * 0.2));
-      grad.addColorStop(1, rgba(hubShell, 0.64 + hubPulse * 0.2));
+      grad.addColorStop(0, rgba({r:255,g:255,b:255}, 0.3 + n.act * 0.12));
+      grad.addColorStop(0.45, rgba(n.col, 0.72 + n.act * 0.22));
+      grad.addColorStop(1, rgba(hubShell, 0.96 + hubPulse * 0.28));
       ctx.beginPath();
       ctx.moveTo(n.x, n.y);
       ctx.lineTo(hubX, hubY);
       ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.18;
+      ctx.lineWidth = 1.48;
       ctx.stroke();
     }
-
-    const amberAuraR = (isLiteDevice ? 18 : 25) + hubPulse * 4.6;
-    const blueAuraR = (isLiteDevice ? 20 : 28) + hubPulse * 5.4;
-
-    const amberAura = ctx.createRadialGradient(hubX + 2, hubY + 1, 0, hubX + 2, hubY + 1, amberAuraR);
-    amberAura.addColorStop(0, rgba(hubCore, 0.5));
-    amberAura.addColorStop(0.55, rgba(hubShell, 0.2));
-    amberAura.addColorStop(1, rgba(hubShell, 0));
-    ctx.beginPath();
-    ctx.arc(hubX + 2, hubY + 1, amberAuraR, 0, Math.PI * 2);
-    ctx.fillStyle = amberAura;
-    ctx.fill();
-
-    const blueAura = ctx.createRadialGradient(hubX - 8, hubY - 2, 0, hubX - 8, hubY - 2, blueAuraR);
-    blueAura.addColorStop(0, rgba(hubBlue, 0.3));
-    blueAura.addColorStop(0.6, rgba(hubBlueSoft, 0.12));
-    blueAura.addColorStop(1, rgba(hubBlueSoft, 0));
-    ctx.beginPath();
-    ctx.arc(hubX - 8, hubY - 2, blueAuraR, 0, Math.PI * 2);
-    ctx.fillStyle = blueAura;
-    ctx.fill();
 
     // Core nucleus with bright inner center and warm shell
     const coreR = isLiteDevice ? 5.4 : 7.1;
     const coreGlow = ctx.createRadialGradient(hubX, hubY, 0, hubX, hubY, coreR * 2.8);
-    coreGlow.addColorStop(0, rgba({r:255,g:246,b:194}, 0.98));
-    coreGlow.addColorStop(0.42, rgba(hubCore, 0.58));
+    coreGlow.addColorStop(0, rgba({r:255,g:255,b:255}, 1));
+    coreGlow.addColorStop(0.18, rgba({r:255,g:252,b:236}, 0.92));
+    coreGlow.addColorStop(0.42, rgba(hubCore, 0.62));
     coreGlow.addColorStop(1, rgba(hubCore, 0));
     ctx.beginPath();
     ctx.arc(hubX, hubY, coreR * 2.8, 0, Math.PI * 2);
@@ -321,8 +304,8 @@
     ctx.fill();
 
     ctx.beginPath();
-    ctx.arc(hubX, hubY, coreR, 0, Math.PI * 2);
-    ctx.fillStyle = rgba({r:255,g:240,b:176}, 1);
+    ctx.arc(hubX, hubY, coreR * 1.06, 0, Math.PI * 2);
+    ctx.fillStyle = rgba({r:255,g:255,b:250}, 1);
     ctx.fill();
 
     const orbits = [
@@ -360,14 +343,14 @@
       ctx.beginPath();
       ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
       ctx.strokeStyle = o.glow;
-      ctx.lineWidth = 2.1;
+      ctx.lineWidth = 1.4;
       ctx.stroke();
 
       // Sharp visible orbit stroke
       ctx.beginPath();
       ctx.ellipse(0, 0, o.rx, o.ry, 0, 0, Math.PI * 2);
-      ctx.strokeStyle = rgba(o.col, 0.72);
-      ctx.lineWidth = 0.95;
+      ctx.strokeStyle = rgba(o.col, 1);
+      ctx.lineWidth = 1.06;
       ctx.stroke();
       ctx.restore();
 
@@ -379,11 +362,11 @@
       const dy = hubY + lx * Math.sin(o.rot) + ly * Math.cos(o.rot);
 
       pushTrail(o.trail, dx, dy, TRAIL_LEN + 6);
-      drawTrail(o.trail, o.col, 1.55, 0.36, 0.28);
+      drawTrail(o.trail, o.col, 1.7, 0.38, 0.34);
 
       ctx.beginPath();
       ctx.arc(dx, dy, o.dotR, 0, Math.PI * 2);
-      ctx.fillStyle = rgba(o.col, 0.95);
+      ctx.fillStyle = rgba({r:255,g:255,b:255}, 0.96);
       ctx.fill();
     }
 
@@ -397,11 +380,11 @@
       const headAlpha = 0.07 + 0.07 * Math.abs(Math.sin(t + p.phase));
 
       pushTrail(p.history, px, py, TRAIL_LEN);
-      drawTrail(p.history, p.col, 1.35, 0.32, 0.2);
+      drawTrail(p.history, p.col, 2.15, 0.26, 0.56);
 
       ctx.beginPath();
-      ctx.arc(px, py, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = rgba(p.col, headAlpha);
+      ctx.arc(px, py, 1.4, 0, Math.PI * 2);
+      ctx.fillStyle = rgba({r:255,g:255,b:255}, Math.min(0.84, headAlpha + 0.28));
       ctx.fill();
     }
 
