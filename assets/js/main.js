@@ -65,21 +65,20 @@
   function buildNodes(){
     nodes = [];
     const isNarrow = W <= 700;
-    const leftPad = isNarrow ? W * 0.06 : W * 0.08;
-    const rightPad = isNarrow ? W * 0.08 : W * 0.1;
-    const topPad = isNarrow ? H * 0.14 : H * 0.1;
-    const bottomPad = isNarrow ? H * 0.18 : H * 0.12;
+    const layerPositions = isNarrow
+      ? [0.06, 0.27, 0.5, 0.73, 0.94]
+      : [0.08, 0.28, 0.5, 0.72, 0.92];
+    const topPad = isNarrow ? H * 0.08 : H * 0.08;
+    const bottomPad = isNarrow ? H * 0.08 : H * 0.08;
     const usableHeight = Math.max(120, H - topPad - bottomPad);
-    const usableWidth = Math.max(120, W - leftPad - rightPad);
     for(let l=0;l<LAYERS.length;l++){
       nodes.push([]);
       const count = LAYERS[l];
-      const layerT = LAYERS.length === 1 ? 0 : l / (LAYERS.length - 1);
-      const x = leftPad + usableWidth * layerT;
+      const x = W * layerPositions[l];
       const palette = layerPalette(l);
-      const jitterX = isNarrow ? 1.4 : 2.2;
-      const jitterY = isNarrow ? 1.8 : 2.8;
-      const spread = count > 1 ? usableHeight * (count <= 3 ? 0.42 : 0.68) : 0;
+      const jitterX = isNarrow ? 0.35 : 0.5;
+      const jitterY = isNarrow ? 0.9 : 1.1;
+      const spread = count > 1 ? usableHeight * 0.86 : 0;
       const top = H * 0.5 - spread * 0.5;
       for(let n=0;n<count;n++){
         const posT = count === 1 ? 0.5 : n / (count - 1);
@@ -107,7 +106,7 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    const bgGlow = ctx.createRadialGradient(W * 0.28, H * 0.34, 0, W * 0.28, H * 0.34, Math.max(W, H) * 0.88);
+    const bgGlow = ctx.createRadialGradient(W * 0.25, H * 0.34, 0, W * 0.25, H * 0.34, Math.max(W, H) * 0.9);
     bgGlow.addColorStop(0, 'rgba(123,198,255,0.04)');
     bgGlow.addColorStop(0.42, 'rgba(196,150,90,0.06)');
     bgGlow.addColorStop(0.8, 'rgba(80,188,168,0.02)');
@@ -207,7 +206,7 @@
     }
 
     // Floating data particles
-    const particleCount = isLiteDevice ? 8 : 18;
+    const particleCount = isLiteDevice ? 8 : 14;
     for(let i=0;i<particleCount;i++){
       const angle=(i/particleCount)*Math.PI*2 + t*0.12 + Math.sin(t*0.3+i)*0.4;
       const radius = W*0.28 + Math.sin(t*0.5+i*0.7)*W*0.05;
