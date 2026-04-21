@@ -1,3 +1,9 @@
+/* Card gentle float for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .proj-card {
+    animation: airFloat 3.5s ease-in-out infinite alternate;
+  }
+}
 /* ── SHAKIL AHMED PORTFOLIO — STYLESHEET ── */
 
 /* Reset & Base */
@@ -689,28 +695,3 @@ footer{
   footer{padding:1.2rem 1rem}
 }
 
-@media (hover:none) and (pointer:coarse){
-  .hero-content,
-  .about-photo-frame,
-  .about-photo-frame img,
-  .proj,
-  .proj-main{
-    animation:none !important;
-    transform:none !important;
-    transition:none !important;
-  }
-  .proj::before{display:none}
-  .btn-fill:hover,
-  .btn-stroke:hover,
-  .f-btn:hover,
-  .pill:hover,
-  .meta-item:hover,
-  .proj:hover,
-  .proj:hover .proj-main,
-  a.c-row:hover{
-    transform:none;
-    box-shadow:none;
-    background:inherit;
-    padding-left:0;
-  }
-}
