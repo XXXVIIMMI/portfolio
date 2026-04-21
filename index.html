@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050608">
 <title>Shakil Ahmed — Deep Learning & Computer Vision Engineer</title>
 <meta name="description" content="Deep Learning & Computer Vision Engineer. Building end-to-end intelligent vision systems for production.">
 <meta property="og:title" content="Shakil Ahmed — Computer Vision Engineer">
@@ -93,8 +94,8 @@ nav.scrolled{
 /* ── HERO ── */
 .hero{
   position:relative;min-height:100svh;
-  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
-  padding:calc(var(--nav-h) + 40px) var(--gutter) clamp(60px,8vw,96px);
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+  padding:calc(var(--nav-h) + 60px) var(--gutter) clamp(60px,8vw,96px);
   overflow:hidden;background:var(--bg);
   text-align:left;
 }
@@ -235,6 +236,9 @@ canvas#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;poi
 /* reveal */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
 .reveal.in{opacity:1;transform:none;}
+/* Cards that are both reveal + floating: once revealed, float animation takes over */
+.skill-card.reveal,.proj-card.reveal{transition:opacity .65s var(--ease);}
+.skill-card.reveal.in,.proj-card.reveal.in{opacity:1;transform:none;}
 
 /* ── ABOUT ── */
 .about-grid{display:grid;grid-template-columns:1fr 280px;gap:clamp(40px,7vw,90px);align-items:start;}
@@ -449,20 +453,119 @@ footer{
 .f-links a{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
 .f-links a:hover{color:var(--accent);}
 
+/* ── FLOATING CARD ANIMATIONS ── */
+@keyframes float1{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  25%{transform:translateY(-8px) rotate(0.3deg);}
+  50%{transform:translateY(-14px) rotate(-0.2deg);}
+  75%{transform:translateY(-6px) rotate(0.15deg);}
+}
+@keyframes float2{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  30%{transform:translateY(-10px) rotate(-0.4deg);}
+  60%{transform:translateY(-16px) rotate(0.25deg);}
+  80%{transform:translateY(-5px) rotate(-0.1deg);}
+}
+@keyframes float3{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  20%{transform:translateY(-6px) rotate(0.2deg);}
+  55%{transform:translateY(-12px) rotate(-0.35deg);}
+  80%{transform:translateY(-4px) rotate(0.1deg);}
+}
+@keyframes float4{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  35%{transform:translateY(-11px) rotate(0.3deg);}
+  65%{transform:translateY(-7px) rotate(-0.2deg);}
+  85%{transform:translateY(-15px) rotate(0.1deg);}
+}
+@keyframes float5{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  40%{transform:translateY(-9px) rotate(-0.25deg);}
+  70%{transform:translateY(-13px) rotate(0.3deg);}
+  90%{transform:translateY(-5px) rotate(-0.15deg);}
+}
+@keyframes float6{
+  0%,100%{transform:translateY(0px) rotate(0deg);}
+  15%{transform:translateY(-7px) rotate(0.35deg);}
+  45%{transform:translateY(-11px) rotate(-0.2deg);}
+  75%{transform:translateY(-14px) rotate(0.15deg);}
+}
+
+/* Card shadow + glow effect for 3D floating feel */
+@keyframes floatShadow{
+  0%,100%{box-shadow:0 4px 20px rgba(0,0,0,0.4),0 0 0 rgba(200,242,100,0);}
+  50%{box-shadow:0 24px 48px rgba(0,0,0,0.6),0 0 20px rgba(200,242,100,0.04);}
+}
+
+/* Apply floating to skill cards */
+.skill-card:nth-child(1){animation:float1 6.2s ease-in-out infinite,floatShadow 6.2s ease-in-out infinite;}
+.skill-card:nth-child(2){animation:float2 7.1s ease-in-out infinite,floatShadow 7.1s ease-in-out infinite;animation-delay:-1.4s;}
+.skill-card:nth-child(3){animation:float3 5.8s ease-in-out infinite,floatShadow 5.8s ease-in-out infinite;animation-delay:-2.8s;}
+.skill-card:nth-child(4){animation:float4 6.7s ease-in-out infinite,floatShadow 6.7s ease-in-out infinite;animation-delay:-0.9s;}
+.skill-card:nth-child(5){animation:float5 7.4s ease-in-out infinite,floatShadow 7.4s ease-in-out infinite;animation-delay:-3.5s;}
+.skill-card:nth-child(6){animation:float6 6.0s ease-in-out infinite,floatShadow 6.0s ease-in-out infinite;animation-delay:-1.8s;}
+
+/* Keep hover interaction smooth — pause float on hover, apply hover transform */
+.skill-card:hover{
+  animation-play-state:paused;
+  transform:translateY(-6px) scale(1.02)!important;
+}
+
+/* Apply floating to project cards */
+.proj-card:nth-child(1){animation:float2 7.3s ease-in-out infinite,floatShadow 7.3s ease-in-out infinite;animation-delay:-0.5s;}
+.proj-card:nth-child(2){animation:float4 6.4s ease-in-out infinite,floatShadow 6.4s ease-in-out infinite;animation-delay:-2.2s;}
+.proj-card:nth-child(3){animation:float1 7.8s ease-in-out infinite,floatShadow 7.8s ease-in-out infinite;animation-delay:-4.1s;}
+.proj-card:nth-child(4){animation:float5 6.9s ease-in-out infinite,floatShadow 6.9s ease-in-out infinite;animation-delay:-1.3s;}
+.proj-card:nth-child(5){animation:float3 7.6s ease-in-out infinite,floatShadow 7.6s ease-in-out infinite;animation-delay:-3.0s;}
+
+.proj-card:hover{
+  animation-play-state:paused;
+  transform:translateY(-8px) scale(1.015)!important;
+}
+
+/* Apply floating to timeline items */
+.tl-item{animation:float3 8.0s ease-in-out infinite;}
+.tl-item:nth-child(2){animation:float5 7.2s ease-in-out infinite;animation-delay:-2.5s;}
+.tl-item:hover{animation-play-state:paused;}
+
+/* Apply floating to contact form */
+.form-wrap{animation:float1 7.5s ease-in-out infinite,floatShadow 7.5s ease-in-out infinite;animation-delay:-1.0s;}
+.form-wrap:focus-within{animation-play-state:paused;}
+
+/* Apply to photo frame */
+.photo-wrap{animation:float4 8.5s ease-in-out infinite;animation-delay:-3.0s;}
+
 /* ── STATS BAR ── */
 /* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .proj-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr));}
+  .skills-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+}
 @media(max-width:900px){
   .about-grid{grid-template-columns:1fr;}
   .about-grid > div:last-child{ order:-1; }
   .photo-wrap{ max-width:260px; margin:0 auto 40px; }
   .contact-grid{grid-template-columns:1fr;}
+  .proj-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
 }
 @media(max-width:760px){
   .nav-links{display:none;}
   .hamburger{display:flex;}
+  .proj-grid{grid-template-columns:1fr;}
+  .skills-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
+  .hero-name{white-space:normal;}
 }
 @media(max-width:540px){
   .proj-grid{grid-template-columns:1fr;}
+  .skills-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .hero-name{font-size:clamp(32px,10vw,64px);}
+  /* On small screens keep floats but reduce magnitude */
+  .skill-card:nth-child(n){animation-duration:8s;}
+  .proj-card:nth-child(n){animation-duration:9s;}
+}
+@media(max-width:380px){
+  .hero-name{font-size:clamp(28px,9vw,56px);}
   .skills-grid{grid-template-columns:1fr;}
 }
 @media(prefers-reduced-motion:reduce){
@@ -843,7 +946,7 @@ footer{
 }
 /* Project card tilt */
 .proj-card {
-  transform-style: preserve-3d;
+  transform-style: flat;
 }
 </style>
 <div id="scroll-progress"></div>
@@ -875,8 +978,18 @@ mob?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { ham.
 
 /* Reveal */
 const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-}), {threshold:.1, rootMargin:'0px 0px -24px 0px'});
+  if (e.isIntersecting) {
+    e.target.classList.add('in');
+    // For cards: after reveal transition completes, enable floating animation
+    const el = e.target;
+    if (el.classList.contains('skill-card') || el.classList.contains('proj-card') || el.classList.contains('form-wrap') || el.classList.contains('photo-wrap')) {
+      // Wait for the reveal transition to complete before floating starts
+      const delay = parseFloat(el.style.transitionDelay || '0') * 1000 + 700;
+      setTimeout(() => { el.style.willChange = 'transform'; }, delay);
+    }
+    io.unobserve(e.target);
+  }
+}), {threshold:.05, rootMargin:'0px 0px -12px 0px'});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 /* Stat counter */
