@@ -25,9 +25,9 @@
 @media (hover: none) and (pointer: coarse) {
   .proj-card {
     animation: float3D 4.5s ease-in-out infinite;
+  }
   .skill-card {
     animation: float3D 4.5s ease-in-out infinite;
-  }
   }
 }
 /* ── SHAKIL AHMED PORTFOLIO — STYLESHEET ── */
