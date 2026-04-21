@@ -1,7 +1,33 @@
+/* Floating 3D animation for cards */
+@keyframes float3D {
+  0% {
+    transform: perspective(800px) translateY(0) rotateX(0deg) rotateY(0deg) scale(1);
+    box-shadow: 0 8px 32px 0 rgba(80,120,200,0.10), 0 1.5px 8px 0 rgba(200,242,100,0.08);
+  }
+  20% {
+    transform: perspective(800px) translateY(-6px) rotateX(2deg) rotateY(-2deg) scale(1.03);
+    box-shadow: 0 16px 36px 0 rgba(80,120,200,0.13), 0 2px 12px 0 rgba(200,242,100,0.10);
+  }
+  40% {
+    transform: perspective(800px) translateY(-10px) rotateX(-2deg) rotateY(2deg) scale(1.04);
+    box-shadow: 0 20px 40px 0 rgba(80,120,200,0.15), 0 2.5px 14px 0 rgba(200,242,100,0.12);
+  }
+  60% {
+    transform: perspective(800px) translateY(-6px) rotateX(2deg) rotateY(-2deg) scale(1.03);
+    box-shadow: 0 16px 36px 0 rgba(80,120,200,0.13), 0 2px 12px 0 rgba(200,242,100,0.10);
+  }
+  100% {
+    transform: perspective(800px) translateY(0) rotateX(0deg) rotateY(0deg) scale(1);
+    box-shadow: 0 8px 32px 0 rgba(80,120,200,0.10), 0 1.5px 8px 0 rgba(200,242,100,0.08);
+  }
+}
 /* Card gentle float for mobile */
 @media (hover: none) and (pointer: coarse) {
   .proj-card {
-    animation: airFloat 3.5s ease-in-out infinite alternate;
+    animation: float3D 4.5s ease-in-out infinite;
+  .skill-card {
+    animation: float3D 4.5s ease-in-out infinite;
+  }
   }
 }
 /* ── SHAKIL AHMED PORTFOLIO — STYLESHEET ── */
@@ -582,7 +608,7 @@ footer{
   section{padding:5rem 1.5rem}
   hr.rule{margin:0 1.5rem}
   .about-cols{grid-template-columns:1fr;gap:3rem}
-  .about-photo-col{max-width:145px;}
+  .about-photo-col{max-width:110px;}
   .exp-layout{grid-template-columns:1fr;gap:2.5rem}
   .proj{grid-template-columns:40px 1fr;gap:0 1.2rem}
   .proj-side{grid-column:2;flex-direction:row;align-items:center;justify-content:flex-start;padding-top:0}
@@ -624,7 +650,7 @@ footer{
   .hero-bio{font-size:0.94rem;line-height:1.72}
   .hero-btns{order:3;margin-top:0.2rem}
   .btn-fill,.btn-stroke{width:100%;text-align:center}
-  .about-photo-col{max-width:180px;margin:0 auto}
+  .about-photo-col{max-width:120px;margin:0 auto}
   .about-meta{gap:1rem;margin-top:1.8rem;padding-top:1.3rem}
   .meta-item{padding-left:0.9rem}
   .meta-key{letter-spacing:0.14em}
