@@ -22,14 +22,6 @@
   }
 }
 /* Card gentle float for mobile */
-@media (hover: none) and (pointer: coarse) {
-  .proj-card {
-    animation: float3D 4.5s ease-in-out infinite;
-  }
-  .skill-card {
-    animation: float3D 4.5s ease-in-out infinite;
-  }
-}
 /* ── SHAKIL AHMED PORTFOLIO — STYLESHEET ── */
 
 /* Reset & Base */
@@ -323,8 +315,6 @@ hr.rule{border:none;border-top:1px solid var(--rule);margin:0 4rem}
 }
 .proj:last-child{border-bottom:none}
 .proj-main{
-  transform:none;
-  transition:none;
 }
 .proj-idx{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;color:var(--text3);padding-top:0.3rem;}
 .proj-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:400;color:var(--text);margin-bottom:0.65rem;line-height:1.2;transition:color 0.2s;}
