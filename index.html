@@ -946,6 +946,49 @@ document.querySelectorAll('.proj-card').forEach(card => {
   card.addEventListener('mouseleave', () => {
     card.style.transform = '';
   });
+  // Touch 3D tilt for mobile
+  card.addEventListener('touchmove', e => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const r = card.getBoundingClientRect();
+    const px = (touch.clientX - r.left) / r.width - 0.5;
+    const py = (touch.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${px * 7}deg) rotateX(${-py * 5}deg) translateY(-3px)`;
+  }, {passive: true});
+  card.addEventListener('touchend', () => {
+    card.style.transform = '';
+  });
+  card.addEventListener('touchcancel', () => {
+    card.style.transform = '';
+  });
+});
+
+// Skill card 3D tilt for mobile
+document.querySelectorAll('.skill-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(700px) rotateY(${px * 7}deg) rotateX(${-py * 5}deg) translateY(-2px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+  // Touch 3D tilt for mobile
+  card.addEventListener('touchmove', e => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const r = card.getBoundingClientRect();
+    const px = (touch.clientX - r.left) / r.width - 0.5;
+    const py = (touch.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(700px) rotateY(${px * 7}deg) rotateX(${-py * 5}deg) translateY(-2px)`;
+  }, {passive: true});
+  card.addEventListener('touchend', () => {
+    card.style.transform = '';
+  });
+  card.addEventListener('touchcancel', () => {
+    card.style.transform = '';
+  });
 });
 
 /* Contact form — opens real email client with pre-filled content */
