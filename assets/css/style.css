@@ -598,7 +598,7 @@ footer{
   section{padding:5rem 1.5rem}
   hr.rule{margin:0 1.5rem}
   .about-cols{grid-template-columns:1fr;gap:3rem}
-  .about-photo-col{max-width:110px;}
+  .about-photo-col{max-width:110px;margin-left:auto;margin-right:auto;}
   .exp-layout{grid-template-columns:1fr;gap:2.5rem}
   .proj{grid-template-columns:40px 1fr;gap:0 1.2rem}
   .proj-side{grid-column:2;flex-direction:row;align-items:center;justify-content:flex-start;padding-top:0}
