@@ -241,7 +241,7 @@ canvas#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;poi
 .skill-card.reveal.in,.proj-card.reveal.in{opacity:1;transform:none;}
 
 /* ── ABOUT ── */
-.about-grid{display:grid;grid-template-columns:1fr 280px;gap:clamp(40px,7vw,90px);align-items:start;}
+.about-grid{display:grid;grid-template-columns:1fr 220px;gap:clamp(40px,7vw,90px);align-items:start;}
 .about-lede{
   font-size:clamp(18px,2.2vw,26px);color:var(--text2);
   line-height:1.55;margin-bottom:28px;padding-bottom:24px;
@@ -261,9 +261,9 @@ canvas#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;poi
 .meta-v a:hover{color:var(--accent);}
 
 /* photo */
-.photo-wrap{position:relative;display:inline-block;width:100%;}
+.photo-wrap{position:relative;display:inline-block;width:220px;max-width:100%;}
 .photo-frame{
-  width:100%;aspect-ratio:3/4;border-radius:10px;
+  width:220px;max-width:100%;aspect-ratio:3/4;border-radius:10px;
   overflow:hidden;border:1px solid var(--border);
   background:var(--bg3);position:relative;
 }
@@ -544,7 +544,7 @@ footer{
 @media(max-width:900px){
   .about-grid{grid-template-columns:1fr;}
   .about-grid > div:last-child{ order:-1; display:flex; justify-content:center; }
-  .photo-wrap{ max-width:260px; margin:0 auto 40px; display:block; }
+  .photo-wrap{ width:180px; margin:0 auto 40px; display:block; }
   .contact-grid{grid-template-columns:1fr;}
   .proj-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
 }
@@ -578,8 +578,8 @@ footer{
 <!-- NAV -->
 <nav id="nav">
   <a href="#top" class="nav-logo">
-    <div class="nav-logo-mark">SA</div>
-    <span>shakil.ahmed</span>
+    <div class="nav-logo-mark" style="padding:0;overflow:hidden;"><img src="assets/images/profile.jpeg" alt="Shakil Ahmed" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:7px;"></div>
+    <span>portfolio</span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
@@ -650,8 +650,8 @@ footer{
       <p class="about-lede">A <strong>Deep Learning &amp; Computer Vision Engineer</strong> who turns raw pixels into working production systems that actually see the world.</p>
       <div class="about-body">
         <p>Currently completing my BSc in Computer Science &amp; Engineering at Dhaka International University (graduating August 2026, GPA 3.40/4.00) — building production-grade ML while still in school.</p>
-        <p>I design, train, and deploy deep learning models end-to-end. From data pipelines and model architecture to API integration and edge deployment. My focus areas include <strong>object detection</strong>, <strong>sequence modeling</strong>, and scalable ML systems with FastAPI and Docker.</p>
-        <p>From fine-tuning <strong>YOLOv11</strong> for retail shelf analytics to building fraud detection systems with 96.4% AUC-ROC — I export to <strong>ONNX/TensorRT</strong> for edge deployment and track every experiment with MLflow &amp; W&amp;B.</p>
+        <p>I build production-grade deep learning systems end-to-end — owning every layer from raw data curation and model architecture through serving infrastructure and edge deployment. My work sits at the intersection of <strong>computer vision</strong>, <strong>sequence modeling</strong>, and systems engineering, with a focus on shipping models that perform reliably outside the notebook.</p>
+        <p>Recent projects include a <strong>YOLOv11</strong>-based retail shelf intelligence system with real-time zone analytics and automated restock logic, and a fraud detection network achieving <strong>96.4% AUC-ROC</strong> on a dataset with extreme 1:578 class imbalance. I routinely export to <strong>ONNX and TensorRT</strong> for constrained-environment inference, and treat experiment tracking via MLflow and W&amp;B as a first-class engineering discipline — not an afterthought.</p>
       </div>
       <div class="meta-table">
         <div class="meta-row"><span class="meta-k">Location</span><span class="meta-v">Dhaka, Bangladesh</span></div>
@@ -688,9 +688,10 @@ footer{
       <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
       <div class="skill-name">Computer Vision</div>
       <div class="pill-row">
-        <span class="pill hi">YOLOv11</span><span class="pill hi">OpenCV</span>
-        <span class="pill hi">Object Detection</span><span class="pill">ONNX Export</span>
-        <span class="pill">TensorRT</span><span class="pill">Transfer Learning</span>
+        <span class="pill hi">YOLOv8 / v11</span><span class="pill hi">OpenCV</span>
+        <span class="pill hi">Object Detection</span><span class="pill hi">Instance Segmentation</span>
+        <span class="pill">Pose Estimation</span><span class="pill">Image Classification</span>
+        <span class="pill">Optical Flow</span><span class="pill">Feature Matching</span>
       </div>
     </div>
 
@@ -698,44 +699,54 @@ footer{
       <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
       <div class="skill-name">Deep Learning</div>
       <div class="pill-row">
-        <span class="pill hi">PyTorch</span><span class="pill hi">JAX</span>
-        <span class="pill">CNNs</span><span class="pill">ViT / BERT</span>
-        <span class="pill">RNNs / LSTMs</span><span class="pill">HuggingFace</span>
+        <span class="pill hi">PyTorch</span><span class="pill hi">CNNs</span>
+        <span class="pill hi">Vision Transformers (ViT)</span><span class="pill">ResNet / EfficientNet</span>
+        <span class="pill">RNNs / LSTMs</span><span class="pill">Attention Mechanisms</span>
+        <span class="pill">Transfer Learning</span><span class="pill">JAX</span>
       </div>
     </div>
 
     <div class="skill-card reveal" style="transition-delay:.12s">
-      <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
-      <div class="skill-name">ML &amp; NLP</div>
+      <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="skill-name">Model Optimization &amp; Edge</div>
       <div class="pill-row">
-        <span class="pill hi">Scikit-learn</span><span class="pill">LangChain</span>
-        <span class="pill">spaCy</span><span class="pill">Pandas</span><span class="pill">NumPy</span><span class="pill">SMOTE</span>
+        <span class="pill hi">ONNX Export</span><span class="pill hi">TensorRT</span>
+        <span class="pill hi">Quantization (INT8/FP16)</span><span class="pill">Pruning</span>
+        <span class="pill">Knowledge Distillation</span><span class="pill">OpenVINO</span>
+        <span class="pill">Edge Inference</span>
       </div>
     </div>
 
     <div class="skill-card reveal" style="transition-delay:.18s">
       <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
-      <div class="skill-name">Deployment &amp; MLOps</div>
+      <div class="skill-name">MLOps &amp; Deployment</div>
       <div class="pill-row">
         <span class="pill hi">FastAPI</span><span class="pill hi">Docker</span>
-        <span class="pill">MLflow</span><span class="pill">W&amp;B</span><span class="pill">CI/CD</span><span class="pill">Git</span>
+        <span class="pill hi">MLflow</span><span class="pill hi">W&amp;B</span>
+        <span class="pill">CI/CD Pipelines</span><span class="pill">REST APIs</span>
+        <span class="pill">Git / GitHub</span>
       </div>
     </div>
 
     <div class="skill-card reveal" style="transition-delay:.24s">
-      <div class="skill-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-      <div class="skill-name">Languages</div>
+      <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+      <div class="skill-name">Data &amp; ML Engineering</div>
       <div class="pill-row">
-        <span class="pill hi">Python</span><span class="pill hi">SQL</span><span class="pill">C / C++</span>
+        <span class="pill hi">PyTorch DataLoaders</span>
+        <span class="pill hi">Albumentations</span><span class="pill">Label Studio</span>
+        <span class="pill">SMOTE / Class Balancing</span>
+        <span class="pill">Scikit-learn</span><span class="pill">Pandas / NumPy</span>
       </div>
     </div>
 
     <div class="skill-card reveal" style="transition-delay:.30s">
-      <div class="skill-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
-      <div class="skill-name">Data &amp; Databases</div>
+      <div class="skill-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <div class="skill-name">Languages &amp; Tools</div>
       <div class="pill-row">
-        <span class="pill">Matplotlib</span><span class="pill">Seaborn</span>
-        <span class="pill">Plotly</span><span class="pill">MySQL</span><span class="pill">MS SQL Server</span>
+        <span class="pill hi">Python</span><span class="pill hi">C / C++</span>
+        <span class="pill">SQL</span><span class="pill">Bash / Shell</span>
+        <span class="pill">CUDA (basics)</span><span class="pill">Jupyter / Colab</span>
+        <span class="pill">HuggingFace</span>
       </div>
     </div>
 
@@ -921,7 +932,6 @@ footer{
 
 <!-- FOOTER -->
 <footer>
-  <span class="f-copy">© 2026 Shakil Ahmed · Deep Learning &amp; Computer Vision Engineer</span>
   <div class="f-links">
     <a href="https://github.com/XXXVIIMMI" target="_blank" rel="noopener noreferrer">GitHub</a>
     <a href="https://www.linkedin.com/in/shakillahmedxunayeed/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
