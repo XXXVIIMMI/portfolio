@@ -543,8 +543,8 @@ footer{
 }
 @media(max-width:900px){
   .about-grid{grid-template-columns:1fr;}
-  .about-grid > div:last-child{ order:-1; }
-  .photo-wrap{ max-width:260px; margin:0 auto 40px; }
+  .about-grid > div:last-child{ order:-1; display:flex; justify-content:center; }
+  .photo-wrap{ max-width:260px; margin:0 auto 40px; display:block; }
   .contact-grid{grid-template-columns:1fr;}
   .proj-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
 }
