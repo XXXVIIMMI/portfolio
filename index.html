@@ -8,6 +8,7 @@
 <meta name="description" content="Deep Learning & Computer Vision Engineer. Building end-to-end intelligent vision systems for production.">
 <meta property="og:title" content="Shakil Ahmed — Computer Vision Engineer">
 <meta property="og:description" content="Deep Learning & Computer Vision Engineer. YOLOv11, PyTorch, FastAPI, ONNX/TensorRT.">
+<link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -40,6 +41,72 @@ body{background:var(--bg);color:var(--text);font-family:var(--r);overflow-x:hidd
 img{display:block;max-width:100%;}
 a{color:inherit;text-decoration:none;}
 
+/* ── CUSTOM CURSOR ── */
+body, a, button, input, textarea, .proj-card, .skill-card { cursor: none !important; }
+#custom-cursor {
+  position: fixed; top: 0; left: 0;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none; z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  will-change: transform;
+}
+#custom-cursor-trail {
+  position: fixed; top: 0; left: 0;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(200, 242, 100, 0.4);
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
+  will-change: transform;
+}
+body.cursor-hover #custom-cursor {
+  width: 10px; height: 10px; background: #fff;
+}
+body.cursor-hover #custom-cursor-trail {
+  width: 50px; height: 50px; background: rgba(255, 255, 255, 0.08); border-color: transparent;
+}
+
+/* ── PRELOADER ── */
+#preloader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg); display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s var(--ease), visibility 0.8s;
+}
+#preloader.hide {
+  opacity: 0; visibility: hidden;
+}
+.loader-terminal {
+  font-family: var(--mono); font-size: 14px; font-weight: 500;
+  color: var(--text2); margin-bottom: 30px; letter-spacing: 0.1em;
+  height: 20px;
+}
+.loader-terminal .cursor {
+  display: inline-block; width: 8px; height: 14px; background: var(--accent);
+  animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 4px;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.loader-content {
+  display: flex; flex-direction: column; align-items: center;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.loader-counter {
+  font-family: var(--mono); font-size: 24px; font-weight: 300;
+  color: var(--accent); margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+.loader-bar-wrap {
+  width: 200px; height: 1px; background: var(--border2);
+  position: relative; overflow: hidden;
+}
+.loader-bar {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: var(--accent); width: 0%;
+  transition: width 0.1s linear;
+}
+
 /* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:900;
@@ -55,14 +122,51 @@ nav.scrolled{
   border-color:var(--border);
 }
 .nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--text);
+  display:flex;align-items:center;gap:0;
+  font-family:var(--mono);font-size:15px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.15em;
+  color:var(--accent);
+  position:relative;
+  text-decoration:none;
 }
-.nav-logo-mark{
-  width:30px;height:30px;border-radius:7px;
+/* Accent underline slides in from left on hover */
+.nav-logo::after {
+  content:'';
+  position:absolute;
+  bottom:-3px; left:0;
+  width:0; height:1.5px;
   background:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--r);font-size:12px;font-weight:700;color:#000;letter-spacing:-.01em;
+  transition:width 0.35s var(--ease);
+}
+.nav-logo:hover::after { width:100%; }
+
+/* Letters: clean staggered fade-up on page load only */
+.nav-logo span {
+  display:inline-block;
+  color:var(--accent);
+  opacity:0;
+  transform:translateY(5px);
+  animation:logo-enter 0.4s var(--ease) forwards;
+  transition:color 0.25s ease, transform 0.25s ease;
+}
+.nav-logo span:nth-child(1){animation-delay:0.10s;}
+.nav-logo span:nth-child(2){animation-delay:0.14s;}
+.nav-logo span:nth-child(3){animation-delay:0.18s;}
+.nav-logo span:nth-child(4){animation-delay:0.22s;}
+.nav-logo span:nth-child(5){animation-delay:0.26s;}
+.nav-logo span:nth-child(6){animation-delay:0.30s;}
+.nav-logo span:nth-child(7){animation-delay:0.34s;}
+.nav-logo span:nth-child(8){animation-delay:0.38s;}
+.nav-logo span:nth-child(9){animation-delay:0.42s;}
+
+@keyframes logo-enter {
+  to { opacity:1; transform:translateY(0); }
+}
+
+/* Hover: uniform lift — all letters move together, no chaos */
+.nav-logo:hover span {
+  transform:translateY(-2px);
+  color:#fff;
 }
 .nav-links{display:flex;gap:4px;list-style:none;align-items:center;}
 .nav-links a{
@@ -138,8 +242,8 @@ canvas#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;poi
 /* role label */
 .hero-eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:24px;
-  opacity:0;animation:up .6s var(--ease) .05s forwards;
+  color:var(--accent);margin-bottom:24px;margin-top:16px;
+  opacity:0;animation:up .6s var(--ease) .15s forwards;
 }
 .hero-eyebrow-line{display:none;}
 
@@ -149,6 +253,7 @@ canvas#heroCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;poi
   font-weight:700;line-height:.9;
   letter-spacing:-.04em;
   white-space:nowrap;
+  margin-left:clamp(-4px,-0.5vw,-2px);
   margin-bottom:clamp(20px,2.5vw,28px);
   opacity:0;animation:up .85s var(--ease) .15s forwards;
 }
@@ -575,11 +680,75 @@ footer{
 </head>
 <body>
 
+<!-- CUSTOM CURSOR -->
+<div id="custom-cursor"></div>
+<div id="custom-cursor-trail"></div>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-terminal" id="loader-term"></div>
+  <div class="loader-content" id="loader-content">
+    <div class="loader-counter">0%</div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const termEl = document.getElementById('loader-term');
+    const contentEl = document.getElementById('loader-content');
+    const counterEl = document.querySelector('.loader-counter');
+    const barEl = document.querySelector('.loader-bar');
+    const preloader = document.getElementById('preloader');
+    
+    // Typing effect for SA.init()
+    const text = "> SA.init()";
+    let typeIdx = 0;
+    termEl.innerHTML = '<span class="text"></span><span class="cursor"></span>';
+    const textSpan = termEl.querySelector('.text');
+    
+    const typeInterval = setInterval(() => {
+      textSpan.textContent += text[typeIdx];
+      typeIdx++;
+      if (typeIdx === text.length) {
+        clearInterval(typeInterval);
+        
+        // Show loading bar after typing finishes
+        setTimeout(() => {
+          contentEl.style.opacity = '1';
+          
+          // Start counter
+          let count = 0;
+          const countInterval = setInterval(() => {
+            count += Math.floor(Math.random() * 6) + 1;
+            if (count >= 100) {
+              count = 100;
+              clearInterval(countInterval);
+              setTimeout(() => {
+                preloader.classList.add('hide');
+              }, 600); // short delay after hitting 100%
+            }
+            counterEl.textContent = count + '%';
+            barEl.style.width = count + '%';
+          }, 80);
+        }, 600); // brief pause before showing counter
+      }
+    }, 120); // typing speed
+  });
+</script>
+
 <!-- NAV -->
 <nav id="nav">
   <a href="#top" class="nav-logo">
-    <div class="nav-logo-mark" style="padding:0;overflow:hidden;"><img src="assets/images/profile.jpeg" alt="Shakil Ahmed" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:7px;"></div>
-    <span>portfolio</span>
+    <span style="animation-delay:0.0s">P</span>
+    <span style="animation-delay:0.1s">o</span>
+    <span style="animation-delay:0.2s">r</span>
+    <span style="animation-delay:0.3s">t</span>
+    <span style="animation-delay:0.4s">f</span>
+    <span style="animation-delay:0.5s">o</span>
+    <span style="animation-delay:0.6s">l</span>
+    <span style="animation-delay:0.7s">i</span>
+    <span style="animation-delay:0.8s">o</span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
@@ -606,11 +775,11 @@ footer{
   <div class="hero-vignette"></div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow">Deep Learning &amp; Computer Vision Engineer</div>
     <h1 class="hero-name">
       <span class="solid">Shakil</span>
       <span class="outline">Ahmed</span>
     </h1>
+    <div class="hero-eyebrow" id="hero-eyebrow"><span id="typed-text"></span><span class="typed-cursor">|</span></div>
     <p class="hero-sub">
       Building end-to-end vision systems — from raw pixels to production inference.
       Deep learning, object detection, scalable ML APIs.
@@ -1132,6 +1301,33 @@ sendBtn?.addEventListener('click', () => {
     formSt.className = 'form-st';
   }, 3000);
 });
+
+/* Custom Cursor Logic */
+const cursor = document.getElementById('custom-cursor');
+const trail = document.getElementById('custom-cursor-trail');
+let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+let trailX = mouseX, trailY = mouseY;
+
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+}, {passive: true});
+
+function animateTrail() {
+  requestAnimationFrame(animateTrail);
+  trailX += (mouseX - trailX) * 0.18;
+  trailY += (mouseY - trailY) * 0.18;
+  trail.style.transform = `translate(${trailX}px, ${trailY}px) translate(-50%, -50%)`;
+}
+animateTrail();
+
+const hoverEls = document.querySelectorAll('a, button, input, textarea, .proj-card, .skill-card, .clink');
+hoverEls.forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
 })();
 </script>
 <!-- Three.js realistic space -->
@@ -1410,6 +1606,62 @@ sendBtn?.addEventListener('click', () => {
     renderer.render(scene, camera);
   }
   animate();
+})();
+</script>
+
+<!-- ── TYPEWRITER ANIMATION ── -->
+<style>
+.typed-cursor {
+  display: inline-block;
+  color: var(--accent);
+  font-weight: 300;
+  animation: typed-blink 0.75s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes typed-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+</style>
+<script>
+(function () {
+  const phrases = [
+    "Deep Learning Engineer",
+    "Computer Vision Engineer",
+    "ML Engineer"
+  ];
+  const el   = document.getElementById('typed-text');
+  let pi = 0, ci = 0, deleting = false;
+
+  const TYPE_SPEED   = 60;
+  const DELETE_SPEED = 35;
+  const PAUSE_FULL   = 1800;
+  const PAUSE_EMPTY  = 400;
+
+  function tick() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ci + 1);
+      ci++;
+      if (ci === phrase.length) {
+        deleting = true;
+        return setTimeout(tick, PAUSE_FULL);
+      }
+      setTimeout(tick, TYPE_SPEED);
+    } else {
+      el.textContent = phrase.slice(0, ci - 1);
+      ci--;
+      if (ci === 0) {
+        deleting = false;
+        pi = (pi + 1) % phrases.length;
+        return setTimeout(tick, PAUSE_EMPTY);
+      }
+      setTimeout(tick, DELETE_SPEED);
+    }
+  }
+
+  // Start after a short delay so hero entrance animation plays first
+  setTimeout(tick, 800);
 })();
 </script>
 
