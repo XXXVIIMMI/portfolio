@@ -793,7 +793,7 @@ footer{
         <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub
       </a>
-      <a href="mailto:shakillahmedxunayeed@gmail.com" class="btn-g">
+      <a href="#contact" class="btn-g">
         <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Email Me
       </a>
@@ -826,7 +826,7 @@ footer{
         <div class="meta-row"><span class="meta-k">Location</span><span class="meta-v">Dhaka, Bangladesh</span></div>
         <div class="meta-row"><span class="meta-k">Status</span><span class="meta-v">Open to opportunities (Remote / On-site)</span></div>
         <div class="meta-row"><span class="meta-k">Focus</span><span class="meta-v">Computer Vision · Deep Learning </span></div>
-        <div class="meta-row"><span class="meta-k">Email</span><span class="meta-v"><a href="mailto:shakillahmedxunayeed@gmail.com">shakillahmedxunayeed@gmail.com</a></span></div>
+        <div class="meta-row"><span class="meta-k">Email</span><span class="meta-v"><a href="#contact">shakillahmedxunayeed@gmail.com</a></span></div>
         <div class="meta-row"><span class="meta-k">Languages</span><span class="meta-v">English · Bengali</span></div>
         <div class="meta-row"><span class="meta-k">Education</span><span class="meta-v">BSc CSE · GPA 3.40 / 4.00</span></div>
       </div>
@@ -899,7 +899,7 @@ footer{
 
     <div class="skill-card reveal" style="transition-delay:.24s">
       <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
-      <div class="skill-name">Data &amp; ML Engineering</div>
+      <div class="skill-name">Data &amp; Machine Learning Engineering</div>
       <div class="pill-row">
         <span class="pill hi">PyTorch DataLoaders</span>
         <span class="pill hi">Albumentations</span><span class="pill">Label Studio</span>
@@ -1057,10 +1057,10 @@ footer{
     <div class="reveal">
       <p class="contact-lede">Looking for ML &amp; Computer Vision roles — remote-friendly or Dhaka-based. If you have a problem involving perception, deep learning, or production ML, let's talk.</p>
       <div class="clinks">
-        <a href="mailto:shakillahmedxunayeed@gmail.com" class="clink">
+        <a href="#contact" class="clink">
           <div class="clink-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
           <div class="clink-body"><span class="clink-k">Email</span><span class="clink-v">shakillahmedxunayeed@gmail.com</span></div>
-          <span class="clink-arrow">↗</span>
+          <span class="clink-arrow">↓</span>
         </a>
         <a href="https://www.linkedin.com/in/shakillahmedxunayeed/" target="_blank" rel="noopener noreferrer" class="clink">
           <div class="clink-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
@@ -1104,7 +1104,7 @@ footer{
   <div class="f-links">
     <a href="https://github.com/XXXVIIMMI" target="_blank" rel="noopener noreferrer">GitHub</a>
     <a href="https://www.linkedin.com/in/shakillahmedxunayeed/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a href="mailto:shakillahmedxunayeed@gmail.com">Email</a>
+    <a href="#contact">Email</a>
   </div>
   <span class="f-copy">Dhaka, Bangladesh</span>
 </footer>
@@ -1272,7 +1272,7 @@ document.querySelectorAll('.skill-card').forEach(card => {
   });
 });
 
-/* Contact form — opens real email client with pre-filled content */
+/* Contact form — inline submission via FormSubmit */
 const sendBtn = document.getElementById('sendBtn');
 const formSt  = document.getElementById('formSt');
 sendBtn?.addEventListener('click', () => {
@@ -1289,17 +1289,43 @@ sendBtn?.addEventListener('click', () => {
     formSt.className = 'form-st err';
     return;
   }
-  const subject = encodeURIComponent(`Portfolio Contact from ${n}`);
-  const body = encodeURIComponent(`Name: ${n}\nEmail: ${e}\n\n${m}`);
-  window.location.href = `mailto:shakillahmedxunayeed@gmail.com?subject=${subject}&body=${body}`;
-  formSt.textContent = '✓ Opening your email client…';
-  formSt.className = 'form-st ok';
-  sendBtn.textContent = 'Send Message';
-  setTimeout(() => {
-    ['fName','fEmail','fMsg'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
-    formSt.textContent = '';
-    formSt.className = 'form-st';
-  }, 3000);
+  
+  formSt.textContent = 'Sending...';
+  formSt.className = 'form-st';
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Sending...';
+
+  fetch('https://formsubmit.co/ajax/shakillahmedxunayeed@gmail.com', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      name: n,
+      email: e,
+      message: m,
+      _subject: `Portfolio Contact from ${n}`
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    formSt.textContent = '✓ Message sent successfully!';
+    formSt.className = 'form-st ok';
+    setTimeout(() => {
+      ['fName','fEmail','fMsg'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+      formSt.textContent = '';
+      formSt.className = 'form-st';
+    }, 3000);
+  })
+  .catch(error => {
+    formSt.textContent = 'Error sending message. Please try again.';
+    formSt.className = 'form-st err';
+  })
+  .finally(() => {
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Send Message';
+  });
 });
 
 /* Custom Cursor Logic */
