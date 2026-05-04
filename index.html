@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#050608">
-<title>Shakil Ahmed — Deep Learning & Computer Vision Engineer</title>
-<meta property="og:title" content="Shakil Ahmed — Deep Learning & Computer Vision Engineer">
+<title>Shakil Ahmed — Software Engineer | AI/ML & Computer Vision</title>
+<meta property="og:title" content="Shakil Ahmed — Software Engineer | AI/ML & Computer Vision">
 <meta property="og:description" content="Building end-to-end vision systems — from raw pixels to production inference.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="assets/images/profile.jpeg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23050608'/><text x='50%25' y='55%25' text-anchor='middle' dominant-baseline='middle' font-family='monospace' font-weight='700' font-size='14' fill='%23C8F264'>SA</text></svg>">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Shakil Ahmed","jobTitle":"Deep Learning & Computer Vision Engineer","email":"shakillahmedxunayeed@gmail.com","sameAs":["https://github.com/XXXVIIMMI","https://www.linkedin.com/in/shakillahmedxunayeed/"]}</script>
-<meta name="description" content="Deep Learning & Computer Vision Engineer. Building end-to-end intelligent vision systems for production.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Shakil Ahmed","jobTitle":"Software Engineer | AI/ML & Computer Vision","email":"shakillahmedxunayeed@gmail.com","sameAs":["https://github.com/XXXVIIMMI","https://www.linkedin.com/in/shakillahmedxunayeed/"]}</script>
+<meta name="description" content="Software Engineer | AI/ML & Computer Vision. Building end-to-end intelligent vision systems for production.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -64,6 +64,12 @@ body.matrix-intro-active #cursor-dot,
 body.matrix-intro-active #cursor-ring,
 body.matrix-intro-active .ctrail {
   display: none !important;
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  #cursor-dot, #cursor-ring, .ctrail { display: none !important; }
+  body, a, button { cursor: auto !important; }
 }
 @keyframes reticle-spin     { to { transform: rotate(360deg);  } }
 @keyframes reticle-spin-rev { to { transform: rotate(-360deg); } }
@@ -235,7 +241,7 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
 }
 .hero-role-text { display: inline; }
 .hero-cursor-blink {
-  display: inline-block; width: 2px; height: 1em;
+  display: inline-block; width: 2px; height: 1.2em;
   background: var(--accent); margin-left: 2px; vertical-align: text-bottom;
   animation: blink 0.9s steps(1) infinite;
 }
@@ -399,10 +405,10 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
   background: rgba(12, 13, 17, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  padding: 24px;
+  padding: clamp(22px, 2.5vw, 32px);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   position: relative; overflow: hidden;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
@@ -435,22 +441,22 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
   display: flex; align-items: center; gap: 12px;
 }
 .skill-icon {
-  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
   border: 1px solid var(--border2); background: var(--bg3);
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, background .2s;
 }
 .skill-domain:hover .skill-icon { border-color: rgba(200,242,100,.3); background: rgba(200,242,100,.05); }
-.skill-icon svg { width: 15px; height: 15px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+.skill-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
 .skill-domain-label {
   display: flex; flex-direction: column; gap: 3px;
 }
 .skill-name {
-  font-size: 13px; font-weight: 700; color: var(--text);
-  letter-spacing: -.02em; line-height: 1;
+  font-size: 17px; font-weight: 700; color: var(--text);
+  letter-spacing: -.025em; line-height: 1.2;
 }
 .skill-category-tag {
-  font-family: var(--mono); font-size: 8px; letter-spacing: .12em;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--text3);
 }
 
@@ -460,13 +466,14 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
 }
 .skill-pill {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 10px 5px 8px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: 4px;
   border: 1px solid var(--border);
-  background: rgba(255,255,255,.025);
-  font-family: var(--mono); font-size: 10px; letter-spacing: .05em;
-  color: var(--text2);
-  transition: border-color .2s, background .2s, color .2s;
+  background: rgba(255,255,255,.03);
+  font-family: var(--mono); font-size: 9px; letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  transition: border-color .18s, background .18s, color .18s;
   white-space: nowrap;
 }
 .skill-domain:hover .skill-pill {
@@ -1078,8 +1085,8 @@ footer {
 .mx-row.dim{ color:rgba(200,242,100,.35); }
 .mx-row.bright{ color:#fff;text-shadow:0 0 12px rgba(200,242,100,.6); }
 .mx-caret{
-  display:inline-block;width:0.75em;height:1em;
-  background:#C8F264;vertical-align:baseline;margin-left:2px;
+  display:inline-block;width:2px;height:1.25em;
+  background:#C8F264;vertical-align:text-bottom;margin-left:2px;
   animation:caretblink .8s steps(1) infinite;
   flex-shrink:0;
 }
@@ -1147,26 +1154,28 @@ footer {
   color:rgba(200,242,100,.7);caret-color:#C8F264;letter-spacing:.06em;
   min-width:0;
 }
-#mx-loader{ display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:3; }
+#mx-loader{ display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:3; opacity:0.9; }
 #mx-loader.show{ display:block; }
 #mx-loader.centered{
   position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
   margin:0;text-align:center;
 }
 #mx-init-label{
-  font-size:clamp(14px,2.2vw,20px);color:#C8F264;letter-spacing:.08em;
-  margin-bottom:14px;text-shadow:0 0 18px rgba(200,242,100,.5);
+  font-size:clamp(14px,2.2vw,20px);color:#4f9eff;letter-spacing:.08em;
+  font-weight:700;
+  margin-bottom:14px;text-shadow:0 0 24px rgba(79,158,255,0.85);
 }
 #mx-bar-wrap{
-  width:min(360px,75vw);height:3px;background:rgba(200,242,100,.12);
-  margin:0 auto;
+  width:min(360px,75vw);height:6px;background:rgba(79,158,255,.12);
+  margin:0 auto;border-radius:10px;overflow:hidden;
 }
 #mx-bar-fill{
-  height:100%;width:0%;background:#C8F264;
-  box-shadow:0 0 10px rgba(200,242,100,.7);transition:width .25s linear;
+  height:100%;width:0%;background:linear-gradient(90deg, #C8F264, #4f9eff);
+  box-shadow:0 0 18px rgba(79,158,255,0.95);transition:width .25s linear;
 }
 #mx-bar-pct{
-  font-size:clamp(10px,1.4vw,13px);color:rgba(200,242,100,.6);
+  font-size:clamp(10px,1.4vw,13px);color:rgba(79,158,255,.7);
+  font-weight:700;
   letter-spacing:.1em;margin-top:8px;text-align:center;
 }
 /* conversation label colours */
@@ -1282,7 +1291,7 @@ footer {
   </div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow">Deep Learning &amp; Computer Vision Engineer</div>
+    <div class="hero-eyebrow">Software Engineer | AI/ML &amp; Computer Vision</div>
 
     <!-- 3. STAGGERED LETTER ANIMATION -->
     <h1 class="hero-name" id="heroName" aria-label="Shakil Ahmed">
@@ -1340,7 +1349,7 @@ footer {
   <h2 class="sec-h reveal">Who I <em>am</em></h2>
   <div class="about-grid">
     <div class="reveal">
-      <p class="about-lede">A <strong>Deep Learning &amp; Computer Vision Engineer</strong> who turns raw pixels into working production systems that actually see the world.</p>
+      <p class="about-lede">A <strong>Software Engineer | AI/ML &amp; Computer Vision</strong> who turns raw pixels into working production systems that actually see the world.</p>
       <div class="about-body">
         <p>Currently completing my BSc in Computer Science &amp; Engineering at Dhaka International University (graduating August 2026) — building production-grade ML while still in school.</p>
         <p>I build production-grade deep learning systems end-to-end — owning every layer from raw data curation and model architecture through serving infrastructure and edge deployment. My work sits at the intersection of <strong>computer vision</strong>, <strong>sequence modeling</strong>, and systems engineering, with a focus on shipping models that perform reliably outside the notebook.</p>
@@ -1393,15 +1402,15 @@ footer {
           <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
           <div class="skill-domain-label">
             <div class="skill-name">Computer Vision</div>
-            <div class="skill-category-tag">Perception · Detection</div>
+            <div class="skill-category-tag">Real-time Inference · Feature Extraction</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>YOLOv8 / v11</span>
-          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>OpenCV</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Segmentation</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Object Tracking</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Keypoint Detection</span>
+          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>YOLO Architectures (v8-v11)</span>
+          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>OpenCV / MediaPipe</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Segmentation (Semantic/Instance)</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Multi-Object Tracking (MOT)</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Pose &amp; Keypoint Estimation</span>
         </div>
       </div>
 
@@ -1410,16 +1419,16 @@ footer {
         <div class="skill-domain-meta">
           <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
           <div class="skill-domain-label">
-            <div class="skill-name">Deep Learning</div>
-            <div class="skill-category-tag">Architecture · Training</div>
+            <div class="skill-name">Deep Learning Foundations</div>
+            <div class="skill-category-tag">Neural Architectures · Training Loops</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>PyTorch</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>CNNs</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Vision Transformers</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>RNNs / LSTM</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Attention Mechanisms</span>
+          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>PyTorch Framework</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>CNN / Vision Transformers (ViT)</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Transfer &amp; Self-Supervised Learning</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>RNN / LSTM Sequences</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Custom Loss Function Design</span>
         </div>
       </div>
 
@@ -1428,16 +1437,16 @@ footer {
         <div class="skill-domain-meta">
           <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
           <div class="skill-domain-label">
-            <div class="skill-name">Model Optimization</div>
-            <div class="skill-category-tag">Inference · Edge Deployment</div>
+            <div class="skill-name">Deployment &amp; Quantization</div>
+            <div class="skill-category-tag">Edge AI · High-Performance Inference</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>ONNX</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>TensorRT</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Quantization</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Pruning</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Edge Deploy</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>ONNX Runtime / Serialization</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>NVIDIA TensorRT Acceleration</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>INT8 / FP16 Quantization</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Knowledge Distillation</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Edge Device Integration</span>
         </div>
       </div>
 
@@ -1446,15 +1455,16 @@ footer {
         <div class="skill-domain-meta">
           <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
           <div class="skill-domain-label">
-            <div class="skill-name">Data &amp; ML Engineering</div>
-            <div class="skill-category-tag">Pipelines · Augmentation</div>
+            <div class="skill-name">MLOps &amp; Data Pipelines</div>
+            <div class="skill-category-tag">Productionization · Automation</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>PyTorch DataLoaders</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Albumentations</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>SMOTE / Balancing</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Feature Engineering</span>
+          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>Production DataLoaders</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Advanced Augmentation (Albumentations)</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Synthetic Data Generation</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Imbalanced Learning / SMOTE</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>MLflow / Experiment Tracking</span>
         </div>
       </div>
 
@@ -1463,16 +1473,16 @@ footer {
         <div class="skill-domain-meta">
           <div class="skill-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div class="skill-domain-label">
-            <div class="skill-name">NLP &amp; LLM</div>
-            <div class="skill-category-tag">Language · Agents</div>
+            <div class="skill-name">NLP &amp; LLM Systems</div>
+            <div class="skill-category-tag">Transformers · Agentic Workflows</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>HuggingFace</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>LangChain</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>BiLSTM + Attention</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Agentic Pipelines</span>
-          <span class="skill-pill" data-level="growing"><span class="skill-pill-dot"></span>RAG</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>HuggingFace Ecosystem</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>LangChain / LlamaIndex</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>RAG Architectures</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>PEFT (LoRA / QLoRA)</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Semantic Search / Vector DBs</span>
         </div>
       </div>
 
@@ -1481,16 +1491,16 @@ footer {
         <div class="skill-domain-meta">
           <div class="skill-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
           <div class="skill-domain-label">
-            <div class="skill-name">Languages &amp; Tools</div>
-            <div class="skill-category-tag">Code · Infrastructure</div>
+            <div class="skill-name">Software Engineering</div>
+            <div class="skill-category-tag">System Architecture · Tools</div>
           </div>
         </div>
         <div class="skill-pills">
-          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>Python</span>
-          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>FastAPI</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>C / C++</span>
-          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>CUDA</span>
-          <span class="skill-pill" data-level="growing"><span class="skill-pill-dot"></span>Docker</span>
+          <span class="skill-pill" data-level="expert"><span class="skill-pill-dot"></span>Advanced Python</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>FastAPI / Production APIs</span>
+          <span class="skill-pill" data-level="advanced"><span class="skill-pill-dot"></span>Docker &amp; Containerization</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>C++ / CUDA Kernels</span>
+          <span class="skill-pill" data-level="mid"><span class="skill-pill-dot"></span>Git / CI/CD Pipelines</span>
         </div>
       </div>
 
@@ -1913,6 +1923,8 @@ buildLetterSpans();
    TYPEWRITER ROLE CYCLER
 ───────────────────────────────────────────── */
 const roles = [
+  'Software Engineer',
+  'AI/ML Developer',
   'Computer Vision Engineer',
   'Deep Learning Practitioner',
   'PyTorch Developer',
@@ -2546,9 +2558,20 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   var ctx    = canvas.getContext('2d');
   var chars  = ('アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ' +
                 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789').split('');
-  var fontSize = 14, cols, drops, rainId;
+
+  /* Responsive font size: smaller on phones, bigger on desktops */
+  function getResponsiveFontSize(){
+    var w = window.innerWidth;
+    if(w < 480)  return 13;   /* phone */
+    if(w < 768)  return 14;   /* large phone / small tablet */
+    if(w < 1024) return 15;   /* tablet */
+    return 16;                /* laptop / desktop */
+  }
+
+  var fontSize = getResponsiveFontSize(), cols, drops, rainId;
 
   function resizeCanvas(){
+    fontSize = getResponsiveFontSize();
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     cols  = Math.floor(canvas.width / fontSize);
@@ -2559,19 +2582,31 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas, {passive:true});
 
-  function drawRain(){
-    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  /* Throttle draw to ~30 fps instead of 60 fps for slower, smoother rain */
+  var lastRainTime = 0;
+  var RAIN_FPS = 28; /* frames per second — lower = slower */
+
+  function drawRain(timestamp){
+    rainId = requestAnimationFrame(drawRain);
+    if(timestamp - lastRainTime < 1000 / RAIN_FPS) return;
+    lastRainTime = timestamp;
+
+    /* Medium fade overlay → balanced trails */
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.font = fontSize + 'px JetBrains Mono, monospace';
     for(var i = 0; i < cols; i++){
       var ch = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillStyle = Math.random() > 0.97 ? 'rgba(255,255,255,0.25)'
-                    : Math.random() > 0.6  ? 'rgba(200,242,100,0.18)' : 'rgba(40,80,8,0.15)';
+      /* Brighter colors: white heads, vivid green mid, softer green tail */
+      var r = Math.random();
+      ctx.fillStyle = r > 0.97 ? 'rgba(255,255,255,0.60)'   /* bright white head */
+                    : r > 0.6  ? 'rgba(200,242,100,0.40)'   /* vivid accent green */
+                    :             'rgba(80,160,20,0.20)';    /* softer green body */
       ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
       if(drops[i] * fontSize > canvas.height && Math.random() > 0.977) drops[i] = 0;
-      drops[i] += 0.5 + Math.random() * 0.5;
+      /* Slightly faster drop speed */
+      drops[i] += 0.15 + Math.random() * 0.25;
     }
-    rainId = requestAnimationFrame(drawRain);
   }
 
   /* ─── DOM refs ─── */
@@ -2623,9 +2658,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     var row = addRow();
     typeInto(row, 'system  : ' + text, SPEED_SYSTEM, done);
   }
-  function visitorEcho(text, cls){
+  function visitorEcho(text, cls, done){
     var row = addRow(cls || 'dim');
-    row.textContent = 'visitor : ' + text;
+    typeInto(row, 'visitor : ' + text, SPEED_VISITOR, done);
   }
 
   /* ─── State ─── */
