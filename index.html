@@ -188,11 +188,7 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
     radial-gradient(ellipse 40% 60% at 0% 50%, rgba(5,6,8,.7) 0%, transparent 60%),
     radial-gradient(ellipse 40% 60% at 100% 50%, rgba(5,6,8,.5) 0%, transparent 60%);
 }
-.hero-top {
-  position: absolute; top: calc(var(--nav-h)+24px);
-  left: var(--gutter); right: var(--gutter);
-  z-index: 3; display: flex; align-items: center; justify-content: flex-end;
-}
+
 .hero-avail {
   display: flex; align-items: center; gap: 7px;
   font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
@@ -203,8 +199,10 @@ canvas#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-i
 
 .hero-content { position: relative; z-index: 3; max-width: 800px; width: 100%; display: flex; flex-direction: column; align-items: flex-start; }
 .hero-eyebrow {
-  font-family: var(--mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+  font-family: var(--mono); font-size: clamp(9px, 1.2vw, 11px); 
+  letter-spacing: .18em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 24px;
+  line-height: 1.6; max-width: min(100%, 450px);
   opacity: 0; animation: up .6s var(--ease) .05s forwards;
 }
 
@@ -1025,6 +1023,8 @@ footer {
 @media(max-width:540px){
   :root { --gutter: 16px; }
   .hero-name { font-size: clamp(32px,10vw,64px); }
+  .hero-eyebrow { font-size: 8.5px; letter-spacing: .12em; margin-bottom: 18px; }
+  .hero-avail { font-size: 9px; margin-bottom: 12px; }
 
   .hero-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
   .btn-p, .btn-g, .btn-cv { width: 100%; justify-content: center; }
@@ -1283,14 +1283,13 @@ footer {
   <canvas id="heroCanvas"></canvas>
   <div class="hero-vignette"></div>
 
-  <div class="hero-top">
-    <div class="hero-avail">
+  <!-- hero-top removed to prevent overlap -->
+
+  <div class="hero-content">
+    <div class="hero-avail" style="margin-bottom: 16px;">
       <div class="avail-dot"></div>
       Open to Work
     </div>
-  </div>
-
-  <div class="hero-content">
     <div class="hero-eyebrow">Software Engineer | AI/ML &amp; Computer Vision</div>
 
     <!-- 3. STAGGERED LETTER ANIMATION -->
