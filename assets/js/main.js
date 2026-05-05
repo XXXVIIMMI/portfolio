@@ -668,6 +668,12 @@ if(contactForm){
 
     if(!name || !email || !message) return;
 
+    // Validate name (letters and spaces only)
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      alert('Name should only contain letters and spaces.');
+      return;
+    }
+
     const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
     const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
     // ── CHANGE THIS TO YOUR REAL EMAIL ──

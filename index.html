@@ -1049,6 +1049,7 @@ footer {
   white-space:pre-wrap;min-height:1.5em;
 }
 .mx-row.dim{ color:rgba(0,220,60,.45); }
+.mx-row.err{ color: var(--rose); }
 .mx-row.bright{ color:#fff;text-shadow:0 0 12px rgba(0,255,70,.7); }
 .mx-caret{
   display:inline-block;width:2px;height:1.25em;
@@ -2253,6 +2254,12 @@ if (photoFrame) {
     // ── 1. Required fields ──
     if (!rawN || !rawE || !rawM) { showErr('Please fill in all fields.'); return; }
 
+    // ── 1.1 Name validation (letters only) ──
+    if (!/^[a-zA-Z\s]+$/.test(rawN)) {
+      showErr('Name should only contain letters (A-Z, a-z) and spaces.');
+      return;
+    }
+
     // ── 2. Length limits ──
     if (rawN.length > LIMITS.name)    { showErr('Name is too long (max 100 characters).'); return; }
     if (rawE.length > LIMITS.email)   { showErr('Email address is too long.'); return; }
@@ -2642,8 +2649,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
 
   /* Prefix helpers */
-  function sysLine(text, done){
-    var row = addRow();
+  function sysLine(text, cls, done){
+    if(typeof cls === 'function'){ done = cls; cls = null; }
+    var row = addRow(cls);
     typeInto(row, 'system  : ' + text, SPEED_SYSTEM, done);
   }
   function visitorEcho(text, cls, done){
@@ -2728,6 +2736,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }
   });
 
+  document.getElementById('mx-yes').addEventListener('click', function(){ handleYnAnswer('yes'); });
+  document.getElementById('mx-no').addEventListener('click', function(){ handleYnAnswer('no'); });
+
   /* ─── Start sequence ─── */
   wait(300, function(){
     sysLine('Hello.', function(){
@@ -2748,7 +2759,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     echoRow.textContent = 'visitor : ' + greeting;
     hiRow.classList.remove('show');
     wait(350, function(){
-      sysLine('Do you want to visit the portfolio?  [ yes / no ]', function(){
+      sysLine('Do you want to visit the portfolio?', function(){
         wait(250, function(){
           showYnInput();
         });
@@ -2762,6 +2773,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if(e.key !== 'Enter') return;
     var name = this.value.trim();
     if(!name) return;
+
+    if(!/^[a-zA-Z\s]+$/.test(name)) {
+      sysLine('Invalid name. Use letters only.', 'err');
+      return;
+    }
+
     nameEl.classList.remove('show');
     /* Static echo row — don't call visitorEcho which would type it again */
     var echoRow = addRow('dim');
@@ -2772,20 +2789,19 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   /* ─── Rain + Loading ─── */
   function startLoad(name){
     return function(){
-      /* fade in rain — full brightness during welcome message */
-      rainId = requestAnimationFrame(drawRain);
-      canvas.classList.add('visible');
-
       sysLine('Welcome, ' + name + '.', function(){
-        wait(400, function(){
+        wait(500, function(){
           /* hide terminal, dim rain behind loader */
           term.style.opacity = '0';
           term.style.transition = 'opacity 0.4s';
           setTimeout(function(){
             term.style.display = 'none';
+            /* Start matrix rain after conversation disappears */
+            rainId = requestAnimationFrame(drawRain);
+            canvas.classList.add('visible');
+            rainDimmed = true;
           }, 400);
-          /* Switch rain to dim mode for the loader phase */
-          rainDimmed = true;
+
           loader.classList.add('show');
           loader.classList.add('centered');
           runLoader();
