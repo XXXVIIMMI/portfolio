@@ -1195,15 +1195,15 @@ footer {
     </div>
     <div id="mx-visitor-hi-row">
       <span id="mx-visitor-hi-prompt">visitor :</span>
-      <input id="mxHiInput" class="mx-visitor-input" type="text" maxlength="32" placeholder="" autocomplete="off" spellcheck="false">
+      <input id="mxHiInput" class="mx-visitor-input" type="text" maxlength="32" placeholder="" autocomplete="off" spellcheck="false" inputmode="text" enterkeyhint="enter" autofocus>
     </div>
     <div id="mx-yn-input-row">
       <span id="mx-yn-prompt">visitor :</span>
-      <input id="mxYnInput" type="text" maxlength="8" placeholder="" autocomplete="off" spellcheck="false">
+      <input id="mxYnInput" type="text" maxlength="8" placeholder="" autocomplete="off" spellcheck="false" inputmode="text" enterkeyhint="enter">
     </div>
     <div id="mx-name-row">
       <span id="mx-name-prompt">visitor :</span>
-      <input id="mxNameInput" type="text" maxlength="32" placeholder="" autocomplete="off" spellcheck="false">
+      <input id="mxNameInput" type="text" maxlength="32" placeholder="" autocomplete="off" spellcheck="false" inputmode="text" enterkeyhint="enter">
     </div>
   </div>
   <div id="mx-loader">
@@ -2619,8 +2619,23 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   var SPEED_SYSTEM  = 30;   /* ms per char for system lines */
   var SPEED_VISITOR = 22;   /* ms per char for visitor echo */
 
+  /* Ensure any tap on the terminal area focuses the current input (crucial for mobile keyboard) */
+  term.addEventListener('click', function(){
+    if(hiRow.classList.contains('show')) forceFocus(hiInput);
+    if(ynInputRow.classList.contains('show')) forceFocus(ynInput);
+    if(nameEl.classList.contains('show')) forceFocus(document.getElementById('mxNameInput'));
+  });
+
   /* ─── Helpers ─── */
   function wait(ms, fn){ setTimeout(fn, ms); }
+
+  function forceFocus(el){
+    if(!el) return;
+    el.focus({preventScroll:true});
+    // Multi-stage retry for mobile
+    setTimeout(function(){ el.focus({preventScroll:true}); }, 50);
+    setTimeout(function(){ el.focus({preventScroll:true}); }, 150);
+  }
 
   function caret(){ return '<span class="mx-caret"></span>'; }
 
@@ -2688,7 +2703,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     ynInputRow.classList.add('show');
     ynInput.value = '';
     /* Small delay before focus helps mobile keyboards open reliably */
-    setTimeout(function(){ ynInput.focus(); }, 80);
+    setTimeout(function(){ forceFocus(ynInput); }, 80);
   }
 
   /* ─── Handle typed YES/NO ─── */
@@ -2705,7 +2720,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
           sysLine('Great. Please enter your name.', function(){
             wait(200, function(){
               nameEl.classList.add('show');
-              setTimeout(function(){ document.getElementById('mxNameInput').focus(); }, 80);
+              setTimeout(function(){ forceFocus(document.getElementById('mxNameInput')); }, 80);
             });
           });
         });
@@ -2744,7 +2759,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     sysLine('Hello.', function(){
       wait(350, function(){
         hiRow.classList.add('show');
-        setTimeout(function(){ hiInput.focus(); }, 80);
+        setTimeout(function(){ forceFocus(hiInput); }, 80);
       });
     });
   });
